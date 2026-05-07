@@ -33,8 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <header>
         <h1>E-commerce Italia</h1>
         <nav>
+            
             <a href="index.php">Home</a>
             <a href="login.php">Login</a>
+
         </nav>
     </header>
     <div class="container">

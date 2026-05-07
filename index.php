@@ -32,9 +32,8 @@ $products = $conn->query($sql);
                 <span>Ciao, <?= $_SESSION['user_name'] ?></span>
                 <a href="logout.php" class="btn btn-danger">Logout</a>
             <?php else: ?>
-                <a href="login.php">Login</a>
-                <a href="register.php">Registrati</a>
-                <a href="login_venditore.php" class="btn">Area Venditori</a>
+                <a href="login.php">Area Clienti</a>
+                <a href="login_venditore.php">Area Venditori</a>
             <?php endif; ?>
         </nav>
     </header>

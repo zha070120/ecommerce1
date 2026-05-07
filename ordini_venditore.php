@@ -1,6 +1,48 @@
 <?php include 'config.php'; richiedi_login_venditore();
 
 $p_iva_venditore = $_SESSION['venditore_piva'];
+$messaggio = '';
+$errore = '';
+// Whitelist degli stati consentiti (solo questi possono essere salvati)
+$stati_consentiti = ['attivo', 'spedito', 'consegnato', 'annullato'];
+
+// GESTIONE AGGIORNAMENTO STATO ORDINE
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aggiorna_stato'])) {
+    $id_ordine = intval($_POST['id_ordine']);
+    $nuovo_stato = trim(strtolower($_POST['stato_ordine']));
+
+    // Controllo 1: verifica che lo stato sia nella whitelist
+    if (!in_array($nuovo_stato, $stati_consentiti)) {
+        $errore = "Stato ordine non valido! Stati consentiti: attivo, spedito, consegnato, annullato.";
+    } else {
+        // Controllo 2: verifica che l'ordine contenga i prodotti del venditore (sicurezza anti-accesso non autorizzato)
+        $stmt_check = $conn->prepare("
+            SELECT DISTINCT o.id_ordine
+            FROM ordine o
+            JOIN p_o po ON o.id_ordine = po.id_ordine
+            JOIN prodotto p ON po.id_prodotto = p.id_prodotto
+            WHERE o.id_ordine = ? AND p.p_iva = ?
+        ");
+        $stmt_check->bind_param("is", $id_ordine, $p_iva_venditore);
+        $stmt_check->execute();
+        $ordine_valido = $stmt_check->get_result()->num_rows > 0;
+        $stmt_check->close();
+
+        if ($ordine_valido) {
+            // Controllo 3: aggiorna lo stato nel database
+            $stmt_update = $conn->prepare("UPDATE ordine SET stato_ordine = ? WHERE id_ordine = ?");
+            $stmt_update->bind_param("si", $nuovo_stato, $id_ordine);
+            if ($stmt_update->execute()) {
+                $messaggio = "Stato dell'ordine #$id_ordine aggiornato con successo!";
+            } else {
+                $errore = "Errore durante l'aggiornamento: " . $conn->error;
+            }
+            $stmt_update->close();
+        } else {
+            $errore = "Non sei autorizzato a modificare questo ordine!";
+        }
+    }
+}
 
 // Recupera tutti gli ordini con prodotti del venditore
 $stmt_ordini = $conn->prepare("
@@ -24,29 +66,69 @@ $stmt_ordini->close();
     <meta charset="UTF-8">
     <title>I Miei Ordini - Area Venditori</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .stato-form { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.5rem; }
+        .stato-form select { padding: 0.3rem; border-radius: 4px; border: 1px solid #ddd; }
+    </style>
 </head>
 <body>
     <header>
         <h1>Area Venditori</h1>
         <nav>
+            <span>Ciao, <?= $_SESSION['venditore_ragione_sociale'] ?></span>
             <a href="dashboard_venditore.php">Dashboard</a>
-            <a href="gestisci_prodotti.php">Gestisci Prodotti</a>
+            <a href="gestisci_prodotti.php">Prodotti</a>
             <a href="ordini_venditore.php">I Miei Ordini</a>
             <a href="profilo_venditore.php">Profilo</a>
-            <span>Ciao, <?= $_SESSION['venditore_ragione_sociale'] ?></span>
             <a href="logout.php" class="btn btn-danger">Logout</a>
         </nav>
     </header>
 
     <div class="container">
         <h2>Ordini Ricevuti</h2>
+
+        <!-- Messaggi di feedback -->
+        <?php if ($messaggio): ?>
+            <div class="alert alert-success"><?= $messaggio ?></div>
+        <?php endif; ?>
+        <?php if ($errore): ?>
+            <div class="alert alert-danger"><?= $errore ?></div>
+        <?php endif; ?>
+
         <?php if ($ordini->num_rows > 0): ?>
             <?php while ($ordine = $ordini->fetch_assoc()): ?>
+                <?php
+                // Colori personalizzati per ogni stato
+                $colore_stato = match($ordine['stato_ordine']) {
+                    'attivo' => '#3498db',
+                    'spedito' => '#f39c12',
+                    'consegnato' => '#27ae60',
+                    'annullato' => '#e74c3c',
+                    default => '#333333'
+                };
+                ?>
                 <div style="background: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
                     <h3>Ordine #<?= $ordine['id_ordine'] ?></h3>
                     <p><strong>Data:</strong> <?= date('d/m/Y', strtotime($ordine['data_ordine'])) ?></p>
-                    <p><strong>Stato:</strong> <span style="font-weight: bold; color: #27ae60;"><?= $ordine['stato_ordine'] ?></span></p>
+                    <p>
+                        <strong>Stato attuale:</strong>
+                        <span style="font-weight: bold; color: <?= $colore_stato ?>;">
+                            <?= ucfirst($ordine['stato_ordine']) ?>
+                        </span>
+                    </p>
                     <p><strong>Cliente:</strong> <?= $ordine['nome'] ?> <?= $ordine['cognome'] ?> (<?= $ordine['email'] ?>)</p>
+
+                    <!-- Form per modificare lo stato ordine -->
+                    <form method="POST" class="stato-form">
+                        <input type="hidden" name="id_ordine" value="<?= $ordine['id_ordine'] ?>">
+                        <select name="stato_ordine" required>
+                            <option value="attivo" <?= $ordine['stato_ordine'] == 'attivo' ? 'selected' : '' ?>>Attivo</option>
+                            <option value="spedito" <?= $ordine['stato_ordine'] == 'spedito' ? 'selected' : '' ?>>Spedito</option>
+                            <option value="consegnato" <?= $ordine['stato_ordine'] == 'consegnato' ? 'selected' : '' ?>>Consegnato</option>
+                            <option value="annullato" <?= $ordine['stato_ordine'] == 'annullato' ? 'selected' : '' ?>>Annullato</option>
+                        </select>
+                        <button type="submit" name="aggiorna_stato" class="btn">Aggiorna Stato</button>
+                    </form>
 
                     <!-- Dettaglio prodotti del venditore in questo ordine -->
                     <?php

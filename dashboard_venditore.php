@@ -52,11 +52,11 @@ $stmt_fatturato->close();
     <header>
         <h1>Area Venditori</h1>
         <nav>
-            <a href="dashboard_venditore.php">Dashboard</a>
-            <a href="gestisci_prodotti.php">Gestisci Prodotti</a>
-            <a href="ordini_venditore.php">I Miei Ordini</a>
-            <a href="profilo_venditore.php">Profilo</a>
             <span>Ciao, <?= $_SESSION['venditore_ragione_sociale'] ?></span>
+            <a href="dashboard_venditore.php">Dashboard</a>
+            <a href="gestisci_prodotti.php">Prodotti</a>
+            <a href="ordini_venditore.php">Ordini</a>
+            <a href="profilo_venditore.php">Profilo</a>
             <a href="logout.php" class="btn btn-danger">Logout</a>
         </nav>
     </header>
