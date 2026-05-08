@@ -40,7 +40,7 @@ $stmt_fatturato->close();
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Venditore - E-commerce Italia</title>
+    <title>Dashboard Venditore - E-commerce Doubao</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; margin: 2rem 0; }

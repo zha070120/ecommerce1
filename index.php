@@ -9,7 +9,7 @@ $products = $conn->query($sql);
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home - E-commerce</title>
+    <title>Home - E-commerce Doubao</title>
     <link rel="stylesheet" href="style.css">
     <style>
 .product-card img{
@@ -23,7 +23,7 @@ $products = $conn->query($sql);
 </head>
 <body>
     <header>
-        <h1>E-commerce Italia</h1>
+        <h1>E-commerce Doubao</h1>
         <nav>
             <a href="index.php">Home</a>
             <?php if (isset($_SESSION['user_email'])): ?>

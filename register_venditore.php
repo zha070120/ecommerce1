@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
 <header>
-    <h1>E-commerce Italia</h1>
+    <h1>E-commerce Doubao</h1>
     <nav>
         <a href="index.php">Home</a>
         <a href="login_venditore.php">Accedi</a>

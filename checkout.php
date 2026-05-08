@@ -61,12 +61,12 @@ $total = 0;
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Checkout - E-commerce Italia</title>
+    <title>Checkout - E-commerce Doubao</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>E-commerce Italia</h1>
+        <h1>E-commerce Doubao</h1>
         <nav>
             <a href="index.php">Home</a>
             <a href="cart.php">Carrello</a>
