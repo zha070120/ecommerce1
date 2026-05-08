@@ -19,7 +19,7 @@ if (isset($_POST['add_to_cart'])) {
     header("Location: cart.php");
     exit;
 }
-
+    
 if (isset($_POST['remove_from_cart'])) {
     $product_id = intval($_POST['product_id']);
     $cart_id = $_SESSION['cart_id'];
