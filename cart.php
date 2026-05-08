@@ -27,7 +27,7 @@ if (isset($_POST['remove_from_cart'])) {
     header("Location: cart.php");
     exit;
 }
-
+    
 $cart_items = $conn->query("
     SELECT pc.*, p.nome, p.prezzo 
     FROM p_c pc 
