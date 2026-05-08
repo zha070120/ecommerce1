@@ -11,12 +11,12 @@ $orders = $conn->query("SELECT * FROM ordine WHERE email='{$_SESSION['user_email
 <!DOCTYPE html>
 <html>
 <head>
-    <title>I miei ordini - E-commerce Italia</title>
+    <title>I miei ordini - E-commerce Doubao</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>E-commerce Italia</h1>
+        <h1>E-commerce Doubao</h1>
         <nav>
             <a href="index.php">Home</a>
             <a href="cart.php">Carrello</a>
