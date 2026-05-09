@@ -26,21 +26,21 @@ table th, table td { padding: 1rem; text-align: left; border-bottom: 1px solid #
    ======================================== */
 
 /* 最畅销商品容器 - 增加下边距 */
-#latest-products {
+#piu-venduto-products {
     margin-bottom: 4.5rem; /* 从3rem增加到4.5rem，拉开与下方区域的距离 */
     padding-bottom: 2.5rem; /* 从2rem增加到2.5rem */
     border-bottom: 1px solid #e0e0e0;
 }
 
 /* 网格布局（与产品列表完全一致） */
-.latest-grid {
+.piu-venduto-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 2rem;
 }
 
 /* 商品卡片（与product-card样式100%统一） */
-.latest-item {
+.piu-venduto-item {
     background: white;
     padding: 1.5rem;
     border-radius: 8px;
@@ -49,13 +49,13 @@ table th, table td { padding: 1rem; text-align: left; border-bottom: 1px solid #
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.latest-item:hover {
+.piu-venduto-item:hover {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.15);
 }
 
 /* 商品图片（与产品卡片图片尺寸一致） */
-.latest-item img {
+.piu-venduto-item img {
     width: 100%;
     height: 200px;
     object-fit: cover;
@@ -64,14 +64,14 @@ table th, table td { padding: 1rem; text-align: left; border-bottom: 1px solid #
 }
 
 /* 商品名称 */
-.latest-item h4 {
+.piu-venduto-item h4 {
     margin-bottom: 0.5rem;
     font-size: 1.1rem;
     color: #2c3e50;
 }
 
 /* 商品价格（与全局价格样式一致） */
-.latest-item p {
+.piu-venduto-item p {
     color: #e74c3c;
     font-weight: bold;
     font-size: 1.2rem;
@@ -137,16 +137,16 @@ h2 {
 
 /* 平板设备 */
 @media (max-width: 768px) {
-    .latest-grid {
+    .piu-venduto-grid {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 1rem;
     }
     
-    .latest-item img {
+    .piu-venduto-item img {
         height: 150px;
     }
     
-    #latest-products {
+    #piu-venduto-products {
         margin-bottom: 3.5rem; /* 平板上稍微减小间距 */
         padding-bottom: 2rem;
     }
@@ -154,11 +154,11 @@ h2 {
 
 /* 手机设备 */
 @media (max-width: 480px) {
-    .latest-grid {
+    .piu-venduto-grid {
         grid-template-columns: 1fr;
     }
     
-    #latest-products {
+    #piu-venduto-products {
         margin-bottom: 3rem; /* 手机上进一步减小间距 */
         padding-bottom: 1.5rem;
     }

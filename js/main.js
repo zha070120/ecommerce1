@@ -4,14 +4,14 @@
 
 // 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
-    loadLatestProducts();
+    prodotti_piu_venduti();
 });
 
 /**
  * AJAX调用：加载最新商品
  * 这是项目中唯一的AJAX调用，满足TPSIT要求
  */
-function loadLatestProducts() {
+function prodotti_piu_venduti() {
     // 获取显示区域
     const container = document.getElementById('piu-venduti');
     
@@ -29,11 +29,11 @@ function loadLatestProducts() {
         })
         .then(products => {
             // 处理成功响应：动态生成HTML
-            let html = '<div class="latest-grid">';
+            let html = '<div class="piu-venduto-grid">';
             
             products.forEach(product => {
                 html += `
-                    <div class="latest-item">
+                    <div class="piu-venduto-item">
                         <img src="${product.indirizzo_img}" alt="${product.nome}">
                         <h4>${product.nome}</h4>
                         <p>€ ${Number(product.prezzo).toFixed(2)}</p>
