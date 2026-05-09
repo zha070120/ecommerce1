@@ -69,6 +69,7 @@ $orders = $conn->query("SELECT * FROM ordine WHERE email='{$_SESSION['user_email
                         <strong>
                             <?php 
                                 if($order['stato_ordine'] == 'attivo') echo 'In lavorazione';
+                                elseif($order['stato_ordine'] == 'spedito') echo 'spedito';
                                 elseif($order['stato_ordine'] == 'consegnato') echo 'Consegnato';
                                 elseif($order['stato_ordine'] == 'annullato') echo 'Annullato';
                             ?>
