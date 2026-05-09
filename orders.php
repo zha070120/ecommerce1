@@ -62,29 +62,42 @@ $orders = $conn->query("SELECT * FROM ordine WHERE email='{$_SESSION['user_email
 
         <?php if ($orders->num_rows > 0): ?>
             <?php while ($order = $orders->fetch_assoc()): ?>
-                <div style="background: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
-                    <h3>Ordine #<?= $order['id_ordine'] ?></h3>
-                    <p>Data: <?= date('d/m/Y', strtotime($order['data_ordine'])) ?></p>
-                    <p>Stato: 
-                        <strong>
-                            <?php 
-                                if($order['stato_ordine'] == 'attivo') echo 'In lavorazione';
-                                elseif($order['stato_ordine'] == 'spedito') echo 'spedito';
-                                elseif($order['stato_ordine'] == 'consegnato') echo 'Consegnato';
-                                elseif($order['stato_ordine'] == 'annullato') echo 'Annullato';
-                            ?>
-                        </strong>
-                    </p>
-
-                    <!-- 只有进行中的订单显示取消按钮 -->
-                    <?php if($order['stato_ordine'] == 'attivo'): ?>
-                        <a href="orders.php?cancel_id=<?= $order['id_ordine'] ?>" 
-                           class="btn btn-danger"
-                           onclick="return confirm('Sei sicuro di voler annullare questo ordine?')">
-                           Annulla Ordine
-                        </a>
-                    <?php endif; ?>
-
+    <div class="order-card">
+        <div class="order-header">
+            <h3>Ordine #<?= $order['id_ordine'] ?></h3>
+            <p>Data: <?= date('d/m/Y', strtotime($order['data_ordine'])) ?></p>
+            <p>Stato: 
+                <strong>
+                    <?php 
+                        if($order['stato_ordine'] == 'attivo') echo 'In lavorazione';
+                        elseif($order['stato_ordine'] == 'spedito') echo 'Spedito';
+                        elseif($order['stato_ordine'] == 'consegnato') echo 'Consegnato';
+                        elseif($order['stato_ordine'] == 'annullato') echo 'Annullato';
+                    ?>
+                </strong>
+            </p>
+        </div>
+        
+        <!-- 只有进行中的订单显示取消按钮 -->
+        <?php if($order['stato_ordine'] == 'attivo'): ?>
+            <a href="orders.php?cancel_id=<?= $order['id_ordine'] ?>" 
+               class="btn btn-danger"
+               onclick="return confirm('Sei sicuro di voler annullare questo ordine?')">
+               Annulla Ordine
+            </a>
+        <?php endif; ?>
+        
+        <div class="table-container">
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>Prodotto</th>
+                        <th>Prezzo unitario</th>
+                        <th>Quantità</th>
+                        <th>Totale</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <?php
                     $order_items = $conn->query("
                         SELECT po.*, p.nome 
@@ -94,35 +107,26 @@ $orders = $conn->query("SELECT * FROM ordine WHERE email='{$_SESSION['user_email
                     ");
                     $order_total = 0;
                     ?>
-                    <table style="margin-top: 1rem;">
-                        <thead>
-                            <tr>
-                                <th>Prodotto</th>
-                                <th>Prezzo unitario</th>
-                                <th>Quantità</th>
-                                <th>Totale</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php while ($item = $order_items->fetch_assoc()): ?>
-                                <?php $order_total += $item['prezzo_tot']; ?>
-                                <tr>
-                                    <td><?= $item['nome'] ?></td>
-                                    <td>€ <?= number_format($item['prezzo_singolo'], 2, ',', '.') ?></td>
-                                    <td><?= $item['pezzi'] ?></td>
-                                    <td>€ <?= number_format($item['prezzo_tot'], 2, ',', '.') ?></td>
-                                </tr>
-                            <?php endwhile; ?>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="3"><strong>Totale ordine</strong></td>
-                                <td><strong>€ <?= number_format($order_total, 2, ',', '.') ?></strong></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            <?php endwhile; ?>
+                    <?php while ($item = $order_items->fetch_assoc()): ?>
+                        <?php $order_total += $item['prezzo_tot']; ?>
+                        <tr>
+                            <td><?= $item['nome'] ?></td>
+                            <td>€ <?= number_format($item['prezzo_singolo'], 2, ',', '.') ?></td>
+                            <td><?= $item['pezzi'] ?></td>
+                            <td>€ <?= number_format($item['prezzo_tot'], 2, ',', '.') ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">Totale ordine</td>
+                        <td>€ <?= number_format($order_total, 2, ',', '.') ?></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+<?php endwhile; ?>
         <?php else: ?>
             <p>Non hai ancora effettuato ordini. <a href="index.php">Inizia a fare acquisti</a></p>
         <?php endif; ?>

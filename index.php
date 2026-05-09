@@ -1,16 +1,18 @@
 <?php 
 include 'config.php';
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 $sql = "SELECT * FROM prodotto";
 $products = $conn->query($sql);
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
+    <meta charset="UTF-8">
+    <!-- 必须的响应式标签（同时满足响应式要求） -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - E-commerce Doubao</title>
     <link rel="stylesheet" href="style.css">
+    <!-- 引入AJAX脚本（defer表示页面加载完再执行） -->
+    <script src="js/main.js" defer></script>
     <style>
 .product-card img{
     width:100%;
@@ -37,14 +39,21 @@ $products = $conn->query($sql);
             <?php endif; ?>
         </nav>
     </header>
-    <div class="container">
-        <h2>I nostri prodotti</h2>
 
-        <?php if ($products && $products->num_rows > 0): ?>
-            <div class="product-grid">
+    <div class="container">
+        <!-- AJAX加载区域：最新商品 -->
+        <h2>Più Venduti</h2>
+        <div id="piu-venduti"></div>
+
+        
+        <!-- 原来的 -->
+        <section id="all-products">
+            <h2>Tutti i Prodotti</h2>
+            <!-- 原有商品列表代码不变 -->
+            <?php if ($products && $products->num_rows > 0): ?>
+                <div class="product-grid">
                 <?php while ($product = $products->fetch_assoc()): ?>
                     <div class="product-card">
-                        <!-- 显示商品图片 -->
                         <img src="<?= $product['indirizzo_img'] ?>" alt="<?= $product['nome'] ?>">
                         <h3><?= $product['nome'] ?></h3>
                         <p>Disponibilità: <?= $product['quantita_disponibile'] ?> pezzi</p>
@@ -68,6 +77,9 @@ $products = $conn->query($sql);
         <?php else: ?>
             <p style="color:red;">Nessun prodotto nel database</p>
         <?php endif; ?>
+        </section>
+        
+        
     </div>
 </body>
 </html>
