@@ -210,7 +210,7 @@ $stmt_prodotti->close();
 <head>
     <meta charset="UTF-8">
     <title>Gestisci Prodotti - Area Venditori</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         /* 新增：图片样式 */
         .product-img-preview {

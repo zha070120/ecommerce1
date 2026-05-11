@@ -10,7 +10,7 @@ $products = $conn->query($sql);
     <!-- 必须的响应式标签（同时满足响应式要求） -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - E-commerce Doubao</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <!-- 引入AJAX脚本（defer表示页面加载完再执行） -->
     <script src="js/main.js" defer></script>
     <style>

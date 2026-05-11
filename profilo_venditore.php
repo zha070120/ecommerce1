@@ -70,7 +70,7 @@ if (isset($_POST['cambia_password'])) {
 <head>
     <meta charset="UTF-8">
     <title>Profilo Venditore - Area Venditori</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>

@@ -41,7 +41,7 @@ $stmt_fatturato->close();
 <head>
     <meta charset="UTF-8">
     <title>Dashboard Venditore - E-commerce Doubao</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; margin: 2rem 0; }
         .stat-card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }

@@ -62,7 +62,7 @@ $total = 0;
 <html>
 <head>
     <title>Checkout - E-commerce Doubao</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>

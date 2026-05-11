@@ -65,7 +65,7 @@ $stmt_ordini->close();
 <head>
     <meta charset="UTF-8">
     <title>I Miei Ordini - Area Venditori</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         .stato-form { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.5rem; }
         .stato-form select { padding: 0.3rem; border-radius: 4px; border: 1px solid #ddd; }

@@ -38,7 +38,7 @@ $orders = $conn->query("SELECT * FROM ordine WHERE email='{$_SESSION['user_email
 <html>
 <head>
     <title>I miei ordini - E-commerce Doubao</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
