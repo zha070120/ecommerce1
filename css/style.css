@@ -1,298 +1,284 @@
+/* 基础重置 */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-body { background-color: #f5f5f5; }
-header { background-color: #2c3e50; color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; }
+
+/* 全局变量 - 统一配色/间距/圆角，方便后期改 */
+:root {
+  --bg-body: #f5f5f5;
+  --bg-header: #2c3e50;
+  --color-primary: #3498db;
+  --color-primary-hover: #2980b9;
+  --color-success: #27ae60;
+  --color-success-hover: #219a52;
+  --color-danger: #e74c3c;
+  --color-danger-hover: #c0392b;
+  --text-dark: #2c3e50;
+  --text-gray: #555;
+  --border-light: #ddd;
+  --border-soft: #e0e0e0;
+  --radius: 8px;
+  --radius-sm: 4px;
+  --shadow: 0 2px 5px rgba(0,0,0,0.1);
+  --shadow-hover: 0 5px 15px rgba(0,0,0,0.15);
+  --trans: 0.2s ease;
+}
+
+body { background-color: var(--bg-body); }
+
+header {
+  background-color: var(--bg-header);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 header a { color: white; text-decoration: none; margin-left: 1rem; }
+
 .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; }
-.product-card { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+/* 商品网格 & 卡片 */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+}
+.product-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
 .product-card h3 { margin-bottom: 0.5rem; }
-.product-card .price { color: #e74c3c; font-weight: bold; font-size: 1.2rem; margin: 1rem 0; }
-.btn { background-color: #3498db; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; }
-.btn:hover { background-color: #2980b9; }
-.btn-success { background-color: #27ae60; }
-.btn-success:hover { background-color: #219a52; }
-.btn-danger { background-color: #e74c3c; }
-.btn-danger:hover { background-color: #c0392b; }
+.product-card .price {
+  color: var(--color-danger);
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin: 1rem 0;
+}
+
+/* 按钮 */
+.btn {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color var(--trans);
+}
+.btn:hover { background-color: var(--color-primary-hover); }
+.btn-success { background-color: var(--color-success); }
+.btn-success:hover { background-color: var(--color-success-hover); }
+.btn-danger { background-color: var(--color-danger); }
+.btn-danger:hover { background-color: var(--color-danger-hover); }
+
+/* 表单 */
 .form-group { margin-bottom: 1rem; }
 .form-group label { display: block; margin-bottom: 0.5rem; }
-.form-group input { width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; }
+.form-group input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+}
+
+/* 基础表格 */
 table { width: 100%; border-collapse: collapse; background: white; }
-table th, table td { padding: 1rem; text-align: left; border-bottom: 1px solid #ddd; }
-.alert { padding: 1rem; border-radius: 4px; margin-bottom: 1rem; }
+table th, table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-light);
+}
+
+/* 提示框 */
+.alert { padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem; }
 .alert-success { background-color: #d4edda; color: #155724; }
 .alert-danger { background-color: #f8d7da; color: #721c24; }
-/* ========================================
-   AJAX最畅销商品区域样式（与全局风格统一）
-   ======================================== */
 
-/* 最畅销商品容器 - 增加下边距 */
+/* ========================================
+   AJAX最畅销商品区域样式
+   ======================================== */
 #piu-venduto-products {
-    margin-bottom: 4.5rem; /* 从3rem增加到4.5rem，拉开与下方区域的距离 */
-    padding-bottom: 2.5rem; /* 从2rem增加到2.5rem */
-    border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 4.5rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--border-soft);
 }
-
-/* 网格布局（与产品列表完全一致） */
 .piu-venduto-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
 }
-
-/* 商品卡片（与product-card样式100%统一） */
 .piu-venduto-item {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: white;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-align: center;
+  transition: transform var(--trans), box-shadow var(--trans);
 }
-
 .piu-venduto-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
 }
-
-/* 商品图片（与产品卡片图片尺寸一致） */
 .piu-venduto-item img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 6px;
-    margin-bottom: 10px;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 10px;
 }
-
-/* 商品名称 */
 .piu-venduto-item h4 {
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
-    color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  color: var(--text-dark);
 }
-
-/* 商品价格（与全局价格样式一致） */
 .piu-venduto-item p {
-    color: #e74c3c;
-    font-weight: bold;
-    font-size: 1.2rem;
-    margin: 0;
+  color: var(--color-danger);
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin: 0;
 }
 
-/* 加载状态样式 */
+/* 加载 / 错误 */
 .loading {
-    text-align: center;
-    color: #7f8c8d;
-    padding: 3rem;
-    font-size: 1.1rem;
+  text-align: center;
+  color: #7f8c8d;
+  padding: 3rem;
+  font-size: 1.1rem;
 }
-
-/* 加载动画（可选，更美观） */
 .loading::after {
-    content: "";
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-left: 10px;
-    vertical-align: middle;
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 10px;
+  vertical-align: middle;
 }
-
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
-
-/* 错误状态样式 */
 .error {
-    text-align: center;
-    color: #e74c3c;
-    padding: 2rem;
-    background-color: #fdf2f2;
-    border-radius: 8px;
-    border: 1px solid #fecaca;
+  text-align: center;
+  color: var(--color-danger);
+  padding: 2rem;
+  background-color: #fdf2f2;
+  border-radius: var(--radius);
+  border: 1px solid #fecaca;
 }
 
-/* ========================================
-   全局标题样式 - 增加上边距
-   ======================================== */
+/* 全局标题 */
 h2 {
-    margin-bottom: 1.5rem;
-    margin-top: 0; /* 重置默认上边距 */
-    color: #2c3e50;
-    font-size: 1.8rem;
-    font-weight: 600;
+  margin-bottom: 1.5rem;
+  margin-top: 0;
+  color: var(--text-dark);
+  font-size: 1.8rem;
+  font-weight: 600;
 }
-
-/* 给"Tutti i Prodotti"标题单独增加上边距 */
-#all-products h2 {
-    margin-top: 1rem;
-}
-
-/* ========================================
-   响应式适配（与全局断点一致）
-   ======================================== */
-
-/* 平板设备 */
-@media (max-width: 768px) {
-    .piu-venduto-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 1rem;
-    }
-    
-    .piu-venduto-item img {
-        height: 150px;
-    }
-    
-    #piu-venduto-products {
-        margin-bottom: 3.5rem; /* 平板上稍微减小间距 */
-        padding-bottom: 2rem;
-    }
-}
-
-/* 手机设备 */
-@media (max-width: 480px) {
-    .piu-venduto-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    #piu-venduto-products {
-        margin-bottom: 3rem; /* 手机上进一步减小间距 */
-        padding-bottom: 1.5rem;
-    }
-}
-
-
+#all-products h2 { margin-top: 1rem; }
 
 /* ========================================
    订单页面表格样式优化
    ======================================== */
-
-/* 订单卡片容器 */
 .order-card {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  background: white;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
-
-/* 订单头部信息 */
 .order-header {
-    margin-bottom: 1rem;
-    padding-bottom: 0.8rem;
-    border-bottom: 1px solid #eee;
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid #eee;
 }
+.order-header h3 { margin-bottom: 0.3rem; color: var(--text-dark); }
+.order-header p { margin: 0.2rem 0; color: var(--text-gray); }
 
-.order-header h3 {
-    margin-bottom: 0.3rem;
-    color: #2c3e50;
-}
-
-.order-header p {
-    margin: 0.2rem 0;
-    color: #555;
-}
-
-/* 表格基础样式优化 */
 .order-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed; /* 固定列宽，确保对齐 */
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
-
-/* 表头样式 */
 .order-table th {
-    text-align: right; /* 默认右对齐 */
-    padding: 0.8rem 0.5rem;
-    border-bottom: 2px solid #eee;
-    color: #2c3e50;
-    font-weight: 600;
-    font-size: 0.9rem;
+  text-align: right;
+  padding: 0.8rem 0.5rem;
+  border-bottom: 2px solid #eee;
+  color: var(--text-dark);
+  font-weight: 600;
+  font-size: 0.9rem;
 }
-
-/* 第一列（产品名称）左对齐 */
-.order-table th:first-child {
-    text-align: left;
-    width: 40%; /* 给产品名称更多空间 */
-}
-
-/* 表格内容样式 */
+.order-table th:first-child { text-align: left; width: 40%; }
 .order-table td {
-    text-align: right; /* 默认右对齐 */
-    padding: 0.7rem 0.5rem;
-    border-bottom: 1px solid #f0f0f0;
-    color: #333;
+  text-align: right;
+  padding: 0.7rem 0.5rem;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
 }
-
-/* 第一列（产品名称）左对齐 */
-.order-table td:first-child {
-    text-align: left;
-}
-
-/* 总计行样式 */
+.order-table td:first-child { text-align: left; }
 .order-table tfoot td {
-    font-weight: bold;
-    padding-top: 1rem;
-    border-top: 2px solid #eee;
-    border-bottom: none;
-    color: #2c3e50;
-    font-size: 1.05rem;
+  font-weight: bold;
+  padding-top: 1rem;
+  border-top: 2px solid #eee;
+  border-bottom: none;
+  color: var(--text-dark);
+  font-size: 1.05rem;
 }
-
-/* 取消订单按钮位置调整 */
-.order-card .btn-danger {
-    margin: 0.5rem 0 1rem 0;
-}
-
-/* 响应式适配：手机端表格横向滚动 */
-@media (max-width: 768px) {
-    .table-container {
-        overflow-x: auto;
-        margin: 0 -0.5rem;
-        padding: 0 0.5rem;
-    }
-    
-    .order-table {
-        min-width: 500px; /* 确保表格在手机上不会太挤 */
-    }
-}
+.order-card .btn-danger { margin: 0.5rem 0 1rem 0; }
 
 /* ========================================
    卖家订单页面专属样式
    ======================================== */
-
-/* 状态更新表单样式 */
 .stato-form {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    margin-bottom: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
 }
-
 .stato-form select {
-    padding: 0.5rem;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    background-color: white;
-    min-width: 120px;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  background-color: white;
+  min-width: 120px;
 }
 
-.stato-form .btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+/* ========================================
+   响应式适配
+   ======================================== */
+@media (max-width: 768px) {
+  .piu-venduto-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .piu-venduto-item img { height: 150px; }
+  #piu-venduto-products {
+    margin-bottom: 3.5rem;
+    padding-bottom: 2rem;
+  }
+  .table-container {
+    overflow-x: auto;
+    margin: 0 -0.5rem;
+    padding: 0 0.5rem;
+  }
+  .order-table { min-width: 500px; }
 }
 
-/* 响应式适配：手机端状态表单垂直排列 */
 @media (max-width: 480px) {
-    .stato-form {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .stato-form select {
-        width: 100%;
-    }
+  .piu-venduto-grid { grid-template-columns: 1fr; }
+  #piu-venduto-products {
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+  }
+  .stato-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .stato-form select { width: 100%; }
 }
