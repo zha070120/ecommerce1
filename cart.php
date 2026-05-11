@@ -1,40 +1,67 @@
 <?php include 'config.php';
 
+// 验证用户登录状态
 if (!isset($_SESSION['user_email'])) {
     header("Location: login.php");
     exit;
 }
 
+$cart_id = $_SESSION['cart_id'];
+$total = 0;
+
+// 添加商品到购物车（预处理语句 防SQL注入）
 if (isset($_POST['add_to_cart'])) {
     $product_id = intval($_POST['product_id']);
     $quantity = intval($_POST['quantity']);
-    $cart_id = $_SESSION['cart_id'];
 
-    $check = $conn->query("SELECT * FROM p_c WHERE id_prodotto=$product_id AND id_carello=$cart_id");
+    // 检查商品是否已在购物车
+    $stmt_check = $conn->prepare("SELECT * FROM p_c WHERE id_prodotto = ? AND id_carello = ?");
+    $stmt_check->bind_param("ii", $product_id, $cart_id);
+    $stmt_check->execute();
+    $check = $stmt_check->get_result();
+
     if ($check->num_rows > 0) {
-        $conn->query("UPDATE p_c SET pezzi = pezzi + $quantity WHERE id_prodotto=$product_id AND id_carello=$cart_id");
+        // 更新商品数量
+        $stmt_update = $conn->prepare("UPDATE p_c SET pezzi = pezzi + ? WHERE id_prodotto = ? AND id_carello = ?");
+        $stmt_update->bind_param("iii", $quantity, $product_id, $cart_id);
+        $stmt_update->execute();
+        $stmt_update->close();
     } else {
-        $conn->query("INSERT INTO p_c (id_prodotto, id_carello, pezzi) VALUES ($product_id, $cart_id, $quantity)");
+        // 新增商品到购物车
+        $stmt_insert = $conn->prepare("INSERT INTO p_c (id_prodotto, id_carello, pezzi) VALUES (?, ?, ?)");
+        $stmt_insert->bind_param("iii", $product_id, $cart_id, $quantity);
+        $stmt_insert->execute();
+        $stmt_insert->close();
     }
+    $stmt_check->close();
+
     header("Location: cart.php");
     exit;
 }
-         
+
+// 移除购物车商品（预处理语句 防SQL注入）
 if (isset($_POST['remove_from_cart'])) {
     $product_id = intval($_POST['product_id']);
-    $cart_id = $_SESSION['cart_id'];
-    $conn->query("DELETE FROM p_c WHERE id_prodotto=$product_id AND id_carello=$cart_id");
+
+    $stmt_delete = $conn->prepare("DELETE FROM p_c WHERE id_prodotto = ? AND id_carello = ?");
+    $stmt_delete->bind_param("ii", $product_id, $cart_id);
+    $stmt_delete->execute();
+    $stmt_delete->close();
+
     header("Location: cart.php");
     exit;
 }
-    
-$cart_items = $conn->query("
+
+// 查询购物车商品（预处理语句 防SQL注入）
+$stmt_cart = $conn->prepare("
     SELECT pc.*, p.nome, p.prezzo 
     FROM p_c pc 
     JOIN prodotto p ON pc.id_prodotto = p.id_prodotto 
-    WHERE pc.id_carello = {$_SESSION['cart_id']}
+    WHERE pc.id_carello = ?
 ");
-$total = 0;
+$stmt_cart->bind_param("i", $cart_id);
+$stmt_cart->execute();
+$cart_items = $stmt_cart->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -99,3 +126,7 @@ $total = 0;
     </div>
 </body>
 </html>
+<?php
+// 释放数据库资源
+$stmt_cart->close();
+?>

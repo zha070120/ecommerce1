@@ -1,13 +1,21 @@
-<?php include 'config.php'; richiedi_login_venditore();
+<?php
+include 'config.php';
+richiedi_login_venditore();
 
 // Recupera dati per la dashboard
-$p_iva_venditore = $_SESSION['venditore_piva'];
+$p_iva_venditore = $_SESSION['venditore_piva'] ?? '';
+// 防护：会话缺失自动跳转登录
+if (empty($p_iva_venditore)) {
+    header("Location: login_venditore.php");
+    exit;
+}
 
 // Numero di prodotti del venditore
 $stmt_prodotti = $conn->prepare("SELECT COUNT(*) AS tot_prodotti FROM prodotto WHERE p_iva = ?");
 $stmt_prodotti->bind_param("s", $p_iva_venditore);
 $stmt_prodotti->execute();
-$tot_prodotti = $stmt_prodotti->get_result()->fetch_assoc()['tot_prodotti'];
+$res_prodotti = $stmt_prodotti->get_result();
+$tot_prodotti = (int)($res_prodotti->fetch_assoc()['tot_prodotti'] ?? 0);
 $stmt_prodotti->close();
 
 // Numero di ordini con prodotti del venditore
@@ -20,7 +28,8 @@ $stmt_ordini = $conn->prepare("
 ");
 $stmt_ordini->bind_param("s", $p_iva_venditore);
 $stmt_ordini->execute();
-$tot_ordini = $stmt_ordini->get_result()->fetch_assoc()['tot_ordini'];
+$res_ordini = $stmt_ordini->get_result();
+$tot_ordini = (int)($res_ordini->fetch_assoc()['tot_ordini'] ?? 0);
 $stmt_ordini->close();
 
 // Fatturato totale
@@ -32,7 +41,8 @@ $stmt_fatturato = $conn->prepare("
 ");
 $stmt_fatturato->bind_param("s", $p_iva_venditore);
 $stmt_fatturato->execute();
-$fatturato_totale = $stmt_fatturato->get_result()->fetch_assoc()['fatturato_totale'] ?? 0;
+$res_fatturato = $stmt_fatturato->get_result();
+$fatturato_totale = (float)($res_fatturato->fetch_assoc()['fatturato_totale'] ?? 0);
 $stmt_fatturato->close();
 ?>
 
@@ -52,7 +62,7 @@ $stmt_fatturato->close();
     <header>
         <h1>Area Venditori</h1>
         <nav>
-            <span>Ciao, <?= $_SESSION['venditore_ragione_sociale'] ?></span>
+            <span>Ciao, <?= $_SESSION['venditore_ragione_sociale'] ?? '' ?></span>
             <a href="dashboard_venditore.php">Dashboard</a>
             <a href="gestisci_prodotti.php">Prodotti</a>
             <a href="ordini_venditore.php">Ordini</a>
@@ -62,7 +72,7 @@ $stmt_fatturato->close();
     </header>
 
     <div class="container">
-        <h2>Benvenuto, <?= $_SESSION['venditore_ragione_sociale'] ?></h2>
+        <h2>Benvenuto, <?= $_SESSION['venditore_ragione_sociale'] ?? '' ?></h2>
         <p>Panoramica del tuo negozio sul nostro e-commerce</p>
 
         <div class="stats-grid">

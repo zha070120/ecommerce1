@@ -1,21 +1,28 @@
-<?php include 'config.php'; richiedi_login_venditore();
+<?php 
+include 'config.php'; 
+richiedi_login_venditore();
 
-$p_iva_venditore = $_SESSION['venditore_piva'];
+$p_iva_venditore = $_SESSION['venditore_piva'] ?? '';
 $messaggio = '';
 $errore = '';
 
-// Recupera dati del venditore
-$stmt_profilo = $conn->prepare("SELECT * FROM venditore WHERE p_iva = ?");
-$stmt_profilo->bind_param("s", $p_iva_venditore);
-$stmt_profilo->execute();
-$profilo = $stmt_profilo->get_result()->fetch_assoc();
-$stmt_profilo->close();
+// 递归获取商家资料（封装逻辑，避免重复代码）
+function caricaProfilo($conn, $p_iva) {
+    $stmt = $conn->prepare("SELECT * FROM venditore WHERE p_iva = ?");
+    $stmt->bind_param("s", $p_iva);
+    $stmt->execute();
+    $profilo = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+    return $profilo;
+}
+$profilo = caricaProfilo($conn, $p_iva_venditore);
 
-// Salvataggio modifiche profilo
+// 保存资料修改
 if (isset($_POST['salva_profilo'])) {
-    $ragione_sociale = $conn->real_escape_string($_POST['ragione_sociale']);
-    $indirizzo = $conn->real_escape_string($_POST['indirizzo']);
-    $cap = $conn->real_escape_string($_POST['cap']);
+    // 清理空白字符，数据更规范
+    $ragione_sociale = trim($_POST['ragione_sociale']);
+    $indirizzo = trim($_POST['indirizzo']);
+    $cap = trim($_POST['cap']);
 
     $stmt_aggiorna = $conn->prepare("
         UPDATE venditore 
@@ -23,39 +30,42 @@ if (isset($_POST['salva_profilo'])) {
         WHERE p_iva = ?
     ");
     $stmt_aggiorna->bind_param("ssss", $ragione_sociale, $indirizzo, $cap, $p_iva_venditore);
+    
     if ($stmt_aggiorna->execute()) {
         $_SESSION['venditore_ragione_sociale'] = $ragione_sociale;
         $messaggio = "Profilo aggiornato con successo!";
-        // Ricarica i dati del profilo
-        $stmt_profilo = $conn->prepare("SELECT * FROM venditore WHERE p_iva = ?");
-        $stmt_profilo->bind_param("s", $p_iva_venditore);
-        $stmt_profilo->execute();
-        $profilo = $stmt_profilo->get_result()->fetch_assoc();
-        $stmt_profilo->close();
+        // 重新加载资料（调用函数，无重复代码）
+        $profilo = caricaProfilo($conn, $p_iva_venditore);
     } else {
         $errore = "Errore nell'aggiornamento: " . $conn->error;
     }
     $stmt_aggiorna->close();
 }
 
-// Modifica password
+// 修改密码
 if (isset($_POST['cambia_password'])) {
-    $password_attuale = $_POST['password_attuale'];
-    $nuova_password = $_POST['nuova_password'];
-    $conferma_password = $_POST['conferma_password'];
+    $password_attuale = trim($_POST['password_attuale']);
+    $nuova_password = trim($_POST['nuova_password']);
+    $conferma_password = trim($_POST['conferma_password']);
 
-    // Verifica password attuale
+    // 验证当前密码
     if (password_verify($password_attuale, $profilo['password'])) {
-        if ($nuova_password == $conferma_password) {
-            $nuova_password_hash = password_hash($nuova_password, PASSWORD_DEFAULT);
-            $stmt_password = $conn->prepare("UPDATE venditore SET password = ? WHERE p_iva = ?");
-            $stmt_password->bind_param("ss", $nuova_password_hash, $p_iva_venditore);
-            if ($stmt_password->execute()) {
-                $messaggio = "Password modificata con successo!";
+        if ($nuova_password === $conferma_password) {
+            // 密码强度基础校验（可选，优化点）
+            if(strlen($nuova_password) >= 6){
+                $nuova_hash = password_hash($nuova_password, PASSWORD_DEFAULT);
+                $stmt_password = $conn->prepare("UPDATE venditore SET password = ? WHERE p_iva = ?");
+                $stmt_password->bind_param("ss", $nuova_hash, $p_iva_venditore);
+                
+                if ($stmt_password->execute()) {
+                    $messaggio = "Password modificata con successo!";
+                } else {
+                    $errore = "Errore nella modifica della password.";
+                }
+                $stmt_password->close();
             } else {
-                $errore = "Errore nella modifica della password.";
+                $errore = "La password deve essere di almeno 6 caratteri!";
             }
-            $stmt_password->close();
         } else {
             $errore = "Le nuove password non coincidono!";
         }
@@ -76,12 +86,11 @@ if (isset($_POST['cambia_password'])) {
     <header>
         <h1>Area Venditori</h1>
         <nav>
-            <span>Ciao, <?= $_SESSION['venditore_ragione_sociale'] ?></span>
+            <span>Ciao, <?= $_SESSION['venditore_ragione_sociale'] ?? 'Utente' ?></span>
             <a href="dashboard_venditore.php">Dashboard</a>
             <a href="gestisci_prodotti.php">Prodotti</a>
             <a href="ordini_venditore.php">Ordini</a>
             <a href="profilo_venditore.php">Profilo</a>
-            
             <a href="logout.php" class="btn btn-danger">Logout</a>
         </nav>
     </header>
@@ -91,45 +100,45 @@ if (isset($_POST['cambia_password'])) {
         <?php if ($messaggio): ?><div class="alert alert-success"><?= $messaggio ?></div><?php endif; ?>
         <?php if ($errore): ?><div class="alert alert-danger"><?= $errore ?></div><?php endif; ?>
 
-        <!-- Form modifica profilo -->
+        <!-- 表单修改资料 -->
         <div style="background: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
             <h3>Dati Aziendali</h3>
             <form method="POST">
                 <div class="form-group">
-                    <label>Partita IVA (non modificabile)</label>
-                    <input type="text" value="<?= $profilo['p_iva'] ?>" disabled>
+                    <label for="p_iva">Partita IVA (non modificabile)</label>
+                    <input type="text" id="p_iva" value="<?= $profilo['p_iva'] ?? '' ?>" disabled>
                 </div>
                 <div class="form-group">
-                    <label>Ragione Sociale</label>
-                    <input type="text" name="ragione_sociale" required value="<?= $profilo['ragione_sociale'] ?>">
+                    <label for="ragione_sociale">Ragione Sociale</label>
+                    <input type="text" id="ragione_sociale" name="ragione_sociale" required value="<?= $profilo['ragione_sociale'] ?? '' ?>">
                 </div>
                 <div class="form-group">
-                    <label>Indirizzo Sede</label>
-                    <input type="text" name="indirizzo" required value="<?= $profilo['indirizzo'] ?>">
+                    <label for="indirizzo">Indirizzo Sede</label>
+                    <input type="text" id="indirizzo" name="indirizzo" required value="<?= $profilo['indirizzo'] ?? '' ?>">
                 </div>
                 <div class="form-group">
-                    <label>CAP</label>
-                    <input type="text" name="cap" required value="<?= $profilo['cap'] ?>">
+                    <label for="cap">CAP</label>
+                    <input type="text" id="cap" name="cap" required value="<?= $profilo['cap'] ?? '' ?>">
                 </div>
                 <button type="submit" name="salva_profilo" class="btn btn-success">Salva Modifiche</button>
             </form>
         </div>
 
-        <!-- Form modifica password -->
+        <!-- 表单修改密码 -->
         <div style="background: white; padding: 1.5rem; border-radius: 8px;">
             <h3>Cambia Password</h3>
             <form method="POST">
                 <div class="form-group">
-                    <label>Password Attuale</label>
-                    <input type="password" name="password_attuale" required>
+                    <label for="password_attuale">Password Attuale</label>
+                    <input type="password" id="password_attuale" name="password_attuale" required>
                 </div>
                 <div class="form-group">
-                    <label>Nuova Password</label>
-                    <input type="password" name="nuova_password" required>
+                    <label for="nuova_password">Nuova Password</label>
+                    <input type="password" id="nuova_password" name="nuova_password" required>
                 </div>
                 <div class="form-group">
-                    <label>Conferma Nuova Password</label>
-                    <input type="password" name="conferma_password" required>
+                    <label for="conferma_password">Conferma Nuova Password</label>
+                    <input type="password" id="conferma_password" name="conferma_password" required>
                 </div>
                 <button type="submit" name="cambia_password" class="btn btn-success">Cambia Password</button>
             </form>

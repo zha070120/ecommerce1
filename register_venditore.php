@@ -1,52 +1,52 @@
 <?php
-session_start();
-
-$host = 'localhost';
-$dbname = 'ecommerce_italia';
-$username = 'root';
-$password = '';
-
-$conn = new mysqli($host, $username, $password, $dbname);
-if ($conn->connect_error) die("Connessione fallita");
-
-$conn->set_charset("utf8mb4");
+include 'config.php';
 
 $errore = '';
 $success = '';
 
+// 处理表单提交
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // 接收并格式化数据
     $p_iva          = trim($_POST['p_iva']);
     $ragione_sociale= trim($_POST['ragione_sociale']);
     $indirizzo      = trim($_POST['indirizzo']);
     $cap            = trim($_POST['cap']);
     $password       = trim($_POST['password']);
 
-    if(empty($p_iva) || empty($ragione_sociale) || empty($password)){
+    // 必填项验证
+    if (empty($p_iva) || empty($ragione_sociale) || empty($password)) {
         $errore = "Compila tutti i campi obbligatori!";
     } else {
-        // 检查 VAT 是否已存在
-        $check = $conn->query("SELECT p_iva FROM venditore WHERE p_iva = '$p_iva'");
-        if($check->num_rows > 0){
+        // 检查Partita IVA已存在
+        $check_stmt = $conn->prepare("SELECT p_iva FROM venditore WHERE p_iva = ?");
+        $check_stmt->bind_param("s", $p_iva);
+        $check_stmt->execute();
+        $check_result = $check_stmt->get_result();
+
+        if ($check_result->num_rows > 0) {
             $errore = "Partita IVA già registrata!";
         } else {
             // 密码加密
             $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-            $sql = "INSERT INTO venditore (p_iva, ragione_sociale, indirizzo, cap, password)
-                    VALUES ('$p_iva', '$ragione_sociale', '$indirizzo', '$cap', '$password_hash')";
-
-            if($conn->query($sql)){
+            // 插入商家数据
+            $insert_stmt = $conn->prepare("INSERT INTO venditore (p_iva, ragione_sociale, indirizzo, cap, password) VALUES (?, ?, ?, ?, ?)");
+            $insert_stmt->bind_param("sssss", $p_iva, $ragione_sociale, $indirizzo, $cap, $password_hash);
+            
+            if ($insert_stmt->execute()) {
                 $success = "Registrazione completata! Ora puoi accedere.";
             } else {
-                $errore = "Errore: ".$conn->error;
+                $errore = "Errore: " . $insert_stmt->error;
             }
+            $insert_stmt->close();
         }
+        $check_stmt->close();
     }
 }
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Registrazione Venditore</title>
@@ -74,33 +74,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <form method="POST">
         <div class="form-group">
-            <label>Partita IVA *</label>
-            <input type="text" name="p_iva" maxlength="13" required>
+            <label for="p_iva">Partita IVA *</label>
+            <input type="text" id="p_iva" name="p_iva" maxlength="13" required>
         </div>
 
         <div class="form-group">
-            <label>Ragione Sociale *</label>
-            <input type="text" name="ragione_sociale" required>
+            <label for="ragione_sociale">Ragione Sociale *</label>
+            <input type="text" id="ragione_sociale" name="ragione_sociale" required>
         </div>
 
         <div class="form-group">
-            <label>Indirizzo</label>
-            <input type="text" name="indirizzo">
+            <label for="indirizzo">Indirizzo</label>
+            <input type="text" id="indirizzo" name="indirizzo">
         </div>
 
         <div class="form-group">
-            <label>CAP</label>
-            <input type="text" name="cap">
+            <label for="cap">CAP</label>
+            <input type="text" id="cap" name="cap">
         </div>
 
         <div class="form-group">
-            <label>Password *</label>
-            <input type="password" name="password" required>
+            <label for="password">Password *</label>
+            <input type="password" id="password" name="password" required>
         </div>
 
         <button type="submit" class="btn btn-success">Registrati</button>
     </form>
 </div>
-
 </body>
 </html>

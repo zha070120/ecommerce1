@@ -1,22 +1,38 @@
 <?php include 'config.php'; $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = $conn->real_escape_string($_POST['email']);
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $result = $conn->query("SELECT * FROM cliente WHERE email='$email'");
+    // 预处理语句查询用户，防SQL注入
+    $stmt = $conn->prepare("SELECT * FROM cliente WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
         if (password_verify($password, $user['password'])) {
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_name'] = $user['nome'];
             
-            $cart_check = $conn->query("SELECT id_carello FROM carello WHERE email='{$user['email']}'");
+            // 购物车查询预处理
+            $stmt_cart = $conn->prepare("SELECT id_carello FROM carello WHERE email = ?");
+            $stmt_cart->bind_param("s", $user['email']);
+            $stmt_cart->execute();
+            $cart_check = $stmt_cart->get_result();
+
             if ($cart_check->num_rows == 0) {
-                $conn->query("INSERT INTO carello (email) VALUES ('{$user['email']}')");
+                // 购物车插入预处理
+                $stmt_insert = $conn->prepare("INSERT INTO carello (email) VALUES (?)");
+                $stmt_insert->bind_param("s", $user['email']);
+                $stmt_insert->execute();
+                $stmt_insert->close();
             }
-            $cart = $conn->query("SELECT id_carello FROM carello WHERE email='{$user['email']}'")->fetch_assoc();
+            $stmt_cart->execute();
+            $cart = $stmt_cart->get_result()->fetch_assoc();
             $_SESSION['cart_id'] = $cart['id_carello'];
+            $stmt_cart->close();
             
             header("Location: index.php");
             exit;
@@ -26,11 +42,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $error = "Email non trovata!";
     }
+    $stmt->close();
 }
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
     <title>Login - E-commerce</title>
     <link rel="stylesheet" href="css/style.css">
@@ -48,12 +65,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php if ($error): ?><div class="alert alert-danger"><?= $error ?></div><?php endif; ?>
         <form method="POST" style="max-width: 500px;">
             <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" required>
+                <!-- 绑定1：for="email" 对应 input id="email" -->
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" required>
             </div>
             <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" required>
+                <!-- 绑定2：for="password" 对应 input id="password" -->
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" required>
             </div>
             <button type="submit" class="btn">Accedi</button>
         </form>
