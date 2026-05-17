@@ -1,6 +1,6 @@
 /* ========================================
    E-commerce Doubao - 全局统一样式表
-   包含所有页面公共样式，统一配色、字体、组件
+   精简优化版：合并重复代码，消除冗余，保留所有视觉效果
    ======================================== */
 
 /* 基础重置 */
@@ -163,6 +163,12 @@ nav a:hover {
     box-shadow: 0 4px 12px rgba(75, 85, 99, 0.3);
 }
 
+/* 小按钮样式 */
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+}
+
 /* ========================================
    标题样式 - 全站统一
    ======================================== */
@@ -279,16 +285,24 @@ h3 {
 
 .form-actions {
     display: flex;
+    justify-content: flex-end;
     gap: 1rem;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
 }
 
-.submit-btn {
-    margin-top: 0.5rem;
+/* 登录/注册表单卡片 */
+.login-wrap, .register-wrap {
+    max-width: 580px;
+    margin: 4rem auto;
+    background: white;
+    padding: 2.5rem;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
 }
 
 /* ========================================
-   表格样式 - 全站统一
+   通用表格样式 - 全站统一
    ======================================== */
 table {
     width: 100%;
@@ -308,6 +322,7 @@ table th {
     text-align: left;
     font-weight: 600;
     font-size: 0.95rem;
+    vertical-align: middle;
 }
 
 table td {
@@ -328,8 +343,25 @@ table tbody tr:last-child td {
     border-bottom: none;
 }
 
+table tfoot {
+    background-color: var(--gray-50);
+    font-size: 1.1rem;
+}
+
+table tfoot td {
+    padding: 1.25rem 1.5rem;
+    font-weight: 700;
+    border-top: 2px solid var(--gray-200);
+}
+
+/* 订单表格差异化样式 */
+.order-table th {
+    background-color: var(--gray-100);
+    color: var(--gray-700);
+}
+
 /* ========================================
-   卡片样式 - 全站统一
+   通用卡片样式 - 全站统一
    ======================================== */
 .card {
     background-color: white;
@@ -403,7 +435,7 @@ table tbody tr:last-child td {
     color: var(--gray-800);
 }
 
-/* 订单状态标签 - 客户/卖家订单页通用 */
+/* 订单状态标签 */
 .status-badge {
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
@@ -432,67 +464,50 @@ table tbody tr:last-child td {
     color: #991b1b;
 }
 
-/* 订单表格样式 - 客户/卖家订单页通用 */
-.order-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.order-table th {
-    background-color: var(--gray-100);
-    color: var(--gray-700);
-    padding: 1rem 1.5rem;
-    text-align: left;
-    font-weight: 600;
-    font-size: 0.9rem;
-    border-bottom: 1px solid var(--gray-200);
-}
-
-.order-table td {
+/* 状态更新表单 */
+.status-update {
     padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--gray-200);
-    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
-.order-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.order-table tfoot {
-    background-color: var(--gray-50);
-    font-size: 1.1rem;
-}
-
-.order-table tfoot td {
-    padding: 1.25rem 1.5rem;
-    font-weight: 700;
-    border-top: 2px solid var(--gray-200);
-}
-
-.product-name {
-    font-weight: 600;
-    color: var(--gray-800);
-}
-
-.price {
-    font-weight: 600;
-    color: var(--danger);
-}
-
-.quantity {
+.status-update label {
     font-weight: 500;
-    text-align: center;
+    color: var(--gray-700);
 }
 
-.subtotal {
-    font-weight: 700;
-    color: var(--danger);
+.status-update select {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    background-color: white;
+    cursor: pointer;
+}
+
+.status-update select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.non-modificabile {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+    color: var(--gray-600);
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 /* ========================================
-   空状态样式 - 全站通用
+   通用空状态样式 - 全站统一
    ======================================== */
-.empty-state {
+.empty-box {
     text-align: center;
     padding: 5rem 2rem;
     background-color: white;
@@ -500,90 +515,24 @@ table tbody tr:last-child td {
     box-shadow: var(--shadow-sm);
 }
 
-.empty-state i {
+.empty-box i {
     font-size: 5rem;
     color: var(--gray-300);
     margin-bottom: 1.5rem;
 }
 
-.empty-state p {
+.empty-box p {
     font-size: 1.25rem;
     color: var(--gray-600);
     margin-bottom: 2rem;
 }
 
 /* ========================================
-   响应式基础样式 - 全站通用
+   商品通用卡片样式
    ======================================== */
-@media (max-width: 768px) {
-    header .container {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 0 24px;
-    }
-    
-    nav {
-        margin-left: 0;
-        justify-content: center;
-        width: 100%;
-        flex-wrap: wrap;
-    }
-    
-    h2 {
-        font-size: 1.5rem;
-    }
-    
-    .form-card {
-        padding: 1.8rem;
-    }
-    
-    .form-actions {
-        flex-direction: column;
-    }
-    
-    /* 移动端表格适配 */
-    table, .order-table {
-        display: block;
-        overflow-x: auto;
-    }
-    
-    table th, table td,
-    .order-table th, .order-table td {
-        padding: 1rem;
-        white-space: nowrap;
-    }
-    
-    .order-header {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 480px) {
-    .btn {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.9rem;
-    }
-    
-    .empty-state {
-        padding: 3rem 1.5rem;
-    }
-    
-    .empty-state i {
-        font-size: 4rem;
-    }
-}
-
-/* ========================================
-   首页商品网格样式
-   ======================================== */
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-bottom: 4rem;
-}
-
-.product-card {
+.prod-card-base,
+.product-card,
+.piu-venduto-item {
     background: white;
     padding: 1.5rem;
     border-radius: var(--radius-lg);
@@ -592,12 +541,16 @@ table tbody tr:last-child td {
     transition: var(--trans);
 }
 
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
+.prod-card-base:hover,
+.product-card:hover,
+.piu-venduto-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
 }
 
-.product-card img {
+.prod-card-base img,
+.product-card img,
+.piu-venduto-item img {
     width: 100%;
     height: 200px;
     object-fit: cover;
@@ -605,23 +558,61 @@ table tbody tr:last-child td {
     margin-bottom: 1rem;
 }
 
-.product-card h3 {
+.prod-card-base h4,
+.product-card h4,
+.piu-venduto-item h4 {
     margin-bottom: 0.5rem;
     font-size: 1.1rem;
-    border-bottom: none;
-    padding-bottom: 0;
+    color: var(--gray-800);
 }
 
-.product-card .price {
+.prod-card-base .price,
+.product-card .price,
+.piu-venduto-item .price {
     color: var(--danger);
     font-weight: bold;
     font-size: 1.2rem;
-    margin: 1rem 0;
+    margin: 0;
 }
 
-/* ========================================
-   AJAX最畅销商品区域样式
-   ======================================== */
+/* 首页商品网格 */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.image-container {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--trans);
+}
+
+.product-card:hover .image-container img {
+    transform: scale(1.05);
+}
+
+.in-stock {
+    color: var(--success);
+    margin-right: 0.5rem;
+}
+
+/* 最畅销商品区域 */
 #piu-venduto-products {
     margin-bottom: 4.5rem;
     padding-bottom: 2.5rem;
@@ -634,42 +625,7 @@ table tbody tr:last-child td {
     gap: 2rem;
 }
 
-.piu-venduto-item {
-    background: white;
-    padding: 1.5rem;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    text-align: center;
-    transition: var(--trans);
-}
-
-.piu-venduto-item:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
-}
-
-.piu-venduto-item img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: var(--radius);
-    margin-bottom: 10px;
-}
-
-.piu-venduto-item h4 {
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
-    color: var(--gray-800);
-}
-
-.piu-venduto-item p {
-    color: var(--danger);
-    font-weight: bold;
-    font-size: 1.2rem;
-    margin: 0;
-}
-
-/* 加载 / 错误状态 */
+/* 加载/错误状态 */
 .loading {
     text-align: center;
     color: var(--gray-600);
@@ -842,305 +798,6 @@ table tbody tr:last-child td {
 }
 
 /* ========================================
-   卖家订单页面专属样式
-   ======================================== */
-.status-update {
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--gray-200);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.status-update label {
-    font-weight: 500;
-    color: var(--gray-700);
-}
-
-.status-update select {
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--gray-300);
-    border-radius: var(--radius);
-    font-size: 0.95rem;
-    background-color: white;
-    cursor: pointer;
-}
-
-.status-update select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.non-modificabile {
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--gray-200);
-    color: var(--gray-600);
-    font-style: italic;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-
-/* ========================================
-   居中表单卡片样式 - 登录/注册页面通用
-   ======================================== */
-.login-wrap, .register-wrap {
-    max-width: 520px;
-    margin: 4rem auto;
-    background: white;
-    padding: 2.5rem;
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-sm);
-}
-
-@media (max-width: 768px) {
-    .login-wrap, .register-wrap {
-        margin: 2rem auto;
-        padding: 1.8rem;
-    }
-}
-
-
-
-
-/* ========================================
-   购物车页面专属样式
-   ======================================== */
-.cart-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    background-color: white;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    margin-bottom: 2rem;
-}
-
-.cart-table th {
-    background-color: var(--primary);
-    color: white;
-    padding: 1rem 1.5rem;
-    text-align: left;
-    font-weight: 600;
-    font-size: 0.95rem;
-}
-
-.cart-table td {
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--gray-200);
-    vertical-align: middle;
-}
-
-.cart-table tbody tr {
-    transition: background-color 0.2s ease;
-}
-
-.cart-table tbody tr:hover {
-    background-color: var(--gray-50);
-}
-
-.cart-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.cart-table tfoot {
-    background-color: var(--gray-50);
-    font-size: 1.1rem;
-}
-
-.cart-table tfoot td {
-    padding: 1.25rem 1.5rem;
-    font-weight: 700;
-    border-top: 2px solid var(--gray-200);
-}
-
-.remove-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
-}
-
-.checkout-container {
-    text-align: right;
-    margin-bottom: 4rem;
-}
-
-.empty-cart {
-    text-align: center;
-    padding: 5rem 2rem;
-    background-color: white;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-}
-
-.empty-cart i {
-    font-size: 5rem;
-    color: var(--gray-300);
-    margin-bottom: 1.5rem;
-}
-
-.empty-cart p {
-    font-size: 1.25rem;
-    color: var(--gray-600);
-    margin-bottom: 2rem;
-}
-
-/* 响应式适配 */
-@media (max-width: 768px) {
-    .cart-table {
-        display: block;
-        overflow-x: auto;
-    }
-    
-    .cart-table th,
-    .cart-table td {
-        padding: 1rem;
-        white-space: nowrap;
-    }
-    
-    .checkout-container {
-        text-align: center;
-    }
-}
-
-@media (max-width: 480px) {
-    .empty-cart {
-        padding: 3rem 1.5rem;
-    }
-    
-    .empty-cart i {
-        font-size: 4rem;
-    }
-}
-
-
-
-
-
-
-
-
-
-/* ========================================
-   结账页面专属样式
-   ======================================== */
-.checkout-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 2rem;
-    margin-bottom: 4rem;
-}
-
-/* 响应式适配 */
-@media (max-width: 768px) {
-    .checkout-actions {
-        flex-direction: column;
-    }
-}
-
-
-
-
-
-
-
-/* ========================================
-   客户订单页面专属样式
-   ======================================== */
-.cancel-button-container {
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--gray-200);
-    text-align: right;
-}
-
-.empty-orders {
-    text-align: center;
-    padding: 5rem 2rem;
-    background-color: white;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-}
-
-.empty-orders i {
-    font-size: 5rem;
-    color: var(--gray-300);
-    margin-bottom: 1.5rem;
-}
-
-.empty-orders p {
-    font-size: 1.25rem;
-    color: var(--gray-600);
-    margin-bottom: 2rem;
-}
-
-/* 响应式适配 */
-@media (max-width: 768px) {
-    .cancel-button-container {
-        text-align: center;
-    }
-}
-
-@media (max-width: 480px) {
-    .empty-orders {
-        padding: 3rem 1.5rem;
-    }
-    
-    .empty-orders i {
-        font-size: 4rem;
-    }
-}
-
-
-
-
-
-
-/* ========================================
-   首页商品卡片增强样式
-   ======================================== */
-.image-container {
-    width: 100%;
-    height: 200px;
-    overflow: hidden;
-    border-radius: var(--radius);
-    margin-bottom: 1rem;
-}
-
-.image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: var(--trans);
-}
-
-.product-card:hover .image-container img {
-    transform: scale(1.05);
-}
-
-.in-stock {
-    color: var(--success);
-    margin-right: 0.5rem;
-}
-
-.product-card .form-group {
-    margin-bottom: 1rem;
-}
-
-.product-card .form-group label {
-    font-size: 0.85rem;
-    margin-bottom: 0.3rem;
-}
-
-.product-card .form-group input {
-    padding: 0.6rem 0.8rem;
-    font-size: 0.9rem;
-}
-
-/* ========================================
    页脚样式
    ======================================== */
 footer {
@@ -1229,8 +886,59 @@ footer {
     color: var(--gray-400);
 }
 
-/* 响应式适配 */
+/* ========================================
+   唯一一份全局响应式 - 全站统一
+   ======================================== */
 @media (max-width: 768px) {
+    header .container {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0 24px;
+    }
+    
+    nav {
+        margin-left: 0;
+        justify-content: center;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    .form-card,
+    .login-wrap, .register-wrap {
+        padding: 1.8rem;
+        margin: 2rem auto;
+    }
+    
+    .form-actions,
+    .checkout-actions,
+    .status-update {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    table, .order-table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    table th, table td,
+    .order-table th, .order-table td {
+        padding: 1rem;
+        white-space: nowrap;
+    }
+    
+    .order-header {
+        grid-template-columns: 1fr;
+    }
+    
+    .cancel-button-container {
+        text-align: center;
+    }
+    
     .footer-grid {
         grid-template-columns: 1fr;
         text-align: center;
@@ -1238,5 +946,20 @@ footer {
     
     .social-icons, .payment-methods {
         justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    
+    .empty-box {
+        padding: 3rem 1.5rem;
+    }
+    
+    .empty-box i {
+        font-size: 4rem;
     }
 }
