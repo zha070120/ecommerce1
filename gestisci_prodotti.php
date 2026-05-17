@@ -191,66 +191,444 @@ $stmt_prodotti->close();
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestisci Prodotti - Area Venditori</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .product-img-preview {
-            max-width: 150px;
-            max-height: 150px;
-            margin-top: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+        /* 全局统一变量 与全站完全一致 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #f97316;
+            --success: #10b981;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background-color: var(--gray-50);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* 导航栏 全站统一样式 */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 100%;
+            padding: 0 40px;
+            width: 100%;
+        }
+
+        header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+        }
+
+        nav a:hover {
+            color: #fef3c7;
+            border-bottom: 2px solid #fef3c7;
+        }
+
+        /* 通用按钮样式 */
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: var(--gray-600);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-700);
+            box-shadow: 0 4px 12px rgba(75, 85, 99, 0.3);
+        }
+
+        /* 标题样式统一 */
+        h2 {
+            font-size: 1.875rem;
+            margin: 3rem 0 1.5rem;
+            color: var(--gray-800);
+            position: relative;
+            padding-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* 提示框样式统一 */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-danger {
+            background-color: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .alert-success {
+            background-color: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        /* 表单卡片美化 */
+        .form-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 0.5rem;
+            color: var(--gray-600);
+            font-size: 0.85rem;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* 产品图片预览 */
+        .product-img-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 1rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            object-fit: cover;
+        }
+
+        /* 产品表格美化 */
+        .products-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 4rem;
+        }
+
+        .products-table th {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .products-table td {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            vertical-align: middle;
+        }
+
+        .products-table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        .products-table tbody tr:hover {
+            background-color: var(--gray-50);
+        }
+
+        .products-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
         .product-img-table {
             width: 60px;
             height: 60px;
             object-fit: cover;
-            border-radius: 4px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .price {
+            font-weight: 600;
+            color: var(--danger);
+        }
+
+        .stock {
+            font-weight: 500;
+            color: var(--success);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* 空状态美化 */
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .empty-state i {
+            font-size: 5rem;
+            color: var(--gray-300);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state p {
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 0 24px;
+            }
+            nav {
+                margin-left: 0;
+                justify-content: center;
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+            .form-card {
+                padding: 1.8rem;
+            }
+            .form-actions {
+                flex-direction: column;
+            }
+            /* 移动端表格适配 */
+            .products-table {
+                display: block;
+                overflow-x: auto;
+            }
+            .products-table th,
+            .products-table td {
+                padding: 1rem;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            .empty-state {
+                padding: 3rem 1.5rem;
+            }
+            .empty-state i {
+                font-size: 4rem;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Area Venditori</h1>
-        <nav>
-            <span>Ciao, <?= $_SESSION['venditore_ragione_sociale'] ?></span>
-            <a href="dashboard_venditore.php">Dashboard</a>
-            <a href="gestisci_prodotti.php">Prodotti</a>
-            <a href="ordini_venditore.php">Ordini</a>
-            <a href="profilo_venditore.php">Profilo</a>
-            <a href="logout.php" class="btn btn-danger">Logout</a>
-        </nav>
+        <div class="container">
+            <h1><i class="fas fa-store"></i> Area Venditori</h1>
+            <nav>
+                <span><i class="fas fa-user"></i> Ciao, <?= $_SESSION['venditore_ragione_sociale'] ?></span>
+                <a href="dashboard_venditore.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="gestisci_prodotti.php" style="border-bottom: 2px solid #fef3c7;"><i class="fas fa-box"></i> Prodotti</a>
+                <a href="ordini_venditore.php"><i class="fas fa-file-invoice"></i> Ordini</a>
+                <a href="profilo_venditore.php"><i class="fas fa-user-cog"></i> Profilo</a>
+                <a href="logout.php" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </div>
     </header>
 
     <div class="container">
-        <h2><?= $prodotto_da_modificare ? 'Modifica Prodotto' : 'Aggiungi Nuovo Prodotto' ?></h2>
-        <?php if ($messaggio): ?><div class="alert alert-success"><?= $messaggio ?></div><?php endif; ?>
-        <?php if ($errore): ?><div class="alert alert-danger"><?= $errore ?></div><?php endif; ?>
+        <h2><i class="fas fa-<?= $prodotto_da_modificare ? 'edit' : 'plus-circle' ?>"></i> <?= $prodotto_da_modificare ? 'Modifica Prodotto' : 'Aggiungi Nuovo Prodotto' ?></h2>
+        
+        <?php if ($messaggio): ?>
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i> <?= $messaggio ?>
+            </div>
+        <?php endif; ?>
+        <?php if ($errore): ?>
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle"></i> <?= $errore ?>
+            </div>
+        <?php endif; ?>
 
-        <form method="POST" enctype="multipart/form-data" style="background: white; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+        <form method="POST" enctype="multipart/form-data" class="form-card">
             <?php if ($prodotto_da_modificare): ?>
                 <input type="hidden" name="id_prodotto" value="<?= $prodotto_da_modificare['id_prodotto'] ?>">
             <?php endif; ?>
 
             <div class="form-group">
-                <!-- ✅ 绑定Label -->
-                <label for="nome">Nome Prodotto</label>
-                <input type="text" id="nome" name="nome" required value="<?= $prodotto_da_modificare['nome'] ?? '' ?>">
+                <label for="nome"><i class="fas fa-tag"></i> Nome Prodotto</label>
+                <input type="text" id="nome" name="nome" required value="<?= $prodotto_da_modificare['nome'] ?? '' ?>" placeholder="Inserisci il nome del prodotto">
             </div>
+            
             <div class="form-group">
-                <!-- ✅ 绑定Label -->
-                <label for="prezzo">Prezzo (€)</label>
-                <input type="number" step="0.01" id="prezzo" name="prezzo" required value="<?= $prodotto_da_modificare['prezzo'] ?? '' ?>">
+                <label for="prezzo"><i class="fas fa-euro-sign"></i> Prezzo (€)</label>
+                <input type="number" step="0.01" id="prezzo" name="prezzo" required value="<?= $prodotto_da_modificare['prezzo'] ?? '' ?>" placeholder="Inserisci il prezzo">
             </div>
+            
             <div class="form-group">
-                <!-- ✅ 绑定Label -->
-                <label for="qty">Quantità Disponibile</label>
-                <input type="number" id="qty" name="quantita_disponibile" required value="<?= $prodotto_da_modificare['quantita_disponibile'] ?? '' ?>">
+                <label for="qty"><i class="fas fa-boxes"></i> Quantità Disponibile</label>
+                <input type="number" id="qty" name="quantita_disponibile" required value="<?= $prodotto_da_modificare['quantita_disponibile'] ?? '' ?>" placeholder="Inserisci la quantità disponibile">
             </div>
 
             <div class="form-group">
-                <!-- ✅ 绑定Label -->
-                <label for="img">Immagine Prodotto</label>
+                <label for="img"><i class="fas fa-image"></i> Immagine Prodotto</label>
                 <input type="file" id="img" name="indirizzo_img" accept="image/jpg, image/jpeg, image/png, image/gif">
                 <small>Formati consentiti: JPG, JPEG, PNG, GIF | Dimensione massima: 2MB</small>
                 
@@ -264,17 +642,25 @@ $stmt_prodotti->close();
                 <?php endif; ?>
             </div>
 
-            <?php if ($prodotto_da_modificare): ?>
-                <button type="submit" name="salva_modifiche" class="btn btn-success">Salva Modifiche</button>
-                <a href="gestisci_prodotti.php" class="btn">Annulla</a>
-            <?php else: ?>
-                <button type="submit" name="aggiungi_prodotto" class="btn btn-success">Aggiungi Prodotto</button>
-            <?php endif; ?>
+            <div class="form-actions">
+                <?php if ($prodotto_da_modificare): ?>
+                    <button type="submit" name="salva_modifiche" class="btn btn-success">
+                        <i class="fas fa-save"></i> Salva Modifiche
+                    </button>
+                    <a href="gestisci_prodotti.php" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Annulla
+                    </a>
+                <?php else: ?>
+                    <button type="submit" name="aggiungi_prodotto" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Aggiungi Prodotto
+                    </button>
+                <?php endif; ?>
+            </div>
         </form>
 
-        <h2>I Tuoi Prodotti</h2>
+        <h2><i class="fas fa-boxes"></i> I Tuoi Prodotti</h2>
         <?php if ($prodotti->num_rows > 0): ?>
-            <table>
+            <table class="products-table">
                 <thead>
                     <tr>
                         <th>Immagine</th>
@@ -292,26 +678,38 @@ $stmt_prodotti->close();
                                 <?php if (!empty($prodotto['indirizzo_img'])): ?>
                                     <img src="<?= $prodotto['indirizzo_img'] ?>" class="product-img-table" alt="<?= $prodotto['nome'] ?>">
                                 <?php else: ?>
-                                    <span class="text-muted">Nessuna</span>
+                                    <span class="text-muted"><i class="fas fa-image"></i> Nessuna</span>
                                 <?php endif; ?>
                             </td>
                             <td><?= $prodotto['id_prodotto'] ?></td>
                             <td><?= $prodotto['nome'] ?></td>
-                            <td>€ <?= number_format($prodotto['prezzo'], 2, ',', '.') ?></td>
-                            <td><?= $prodotto['quantita_disponibile'] ?> pezzi</td>
+                            <td class="price">€ <?= number_format($prodotto['prezzo'], 2, ',', '.') ?></td>
+                            <td class="stock"><?= $prodotto['quantita_disponibile'] ?> pezzi</td>
                             <td>
-                                <a href="gestisci_prodotti.php?modifica=<?= $prodotto['id_prodotto'] ?>" class="btn">Modifica</a>
-                                <form method="POST" style="display: inline-block;">
-                                    <input type="hidden" name="id_prodotto" value="<?= $prodotto['id_prodotto'] ?>">
-                                    <button type="submit" name="elimina_prodotto" class="btn btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo prodotto?')">Elimina</button>
-                                </form>
+                                <div class="action-buttons">
+                                    <a href="gestisci_prodotti.php?modifica=<?= $prodotto['id_prodotto'] ?>" class="btn">
+                                        <i class="fas fa-edit"></i> Modifica
+                                    </a>
+                                    <form method="POST" style="display: inline-block;">
+                                        <input type="hidden" name="id_prodotto" value="<?= $prodotto['id_prodotto'] ?>">
+                                        <button type="submit" name="elimina_prodotto" class="btn btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo prodotto?')">
+                                            <i class="fas fa-trash"></i> Elimina
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     <?php endwhile; ?>
                 </tbody>
             </table>
         <?php else: ?>
-            <p>Non hai ancora aggiunto prodotti al catalogo.</p>
+            <div class="empty-state">
+                <i class="fas fa-box-open"></i>
+                <p>Non hai ancora aggiunto prodotti al catalogo.</p>
+                <a href="#aggiungi" class="btn">
+                    <i class="fas fa-plus"></i> Aggiungi il tuo primo prodotto
+                </a>
+            </div>
         <?php endif; ?>
     </div>
 </body>
