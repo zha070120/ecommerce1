@@ -136,7 +136,7 @@ $cart_items = $stmt_cart->get_result();
                 </a>
             </div>
         <?php else: ?>
-            <div class="empty-cart">
+            <div class="empty-box">
                 <i class="fas fa-shopping-cart"></i>
                 <p>Il tuo carrello è vuoto</p>
                 <a href="index.php" class="btn">

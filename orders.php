@@ -205,7 +205,7 @@ $stmt_ordini->close();
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
-            <div class="empty-orders">
+            <div class="empty-box">
                 <i class="fas fa-file-invoice"></i>
                 <p>Non hai ancora effettuato ordini</p>
                 <a href="index.php" class="btn">

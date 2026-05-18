@@ -210,7 +210,7 @@ $stmt_ordini->close();
                 </div>
             <?php endwhile; ?>
         <?php else: ?>
-            <div class="empty-state">
+            <div class="empty-box">
                 <i class="fas fa-shopping-bag"></i>
                 <p>Non hai ancora ricevuto ordini per i tuoi prodotti.</p>
                 <a href="gestisci_prodotti.php" class="btn">

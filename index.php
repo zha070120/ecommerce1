@@ -109,7 +109,7 @@ $products = $stmt->get_result();
                     <div class="social-icons">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-x"></i></a>
                         <a href="#"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
@@ -141,7 +141,7 @@ $products = $stmt->get_result();
                     <p><i class="fas fa-map-marker-alt"></i> Via Roma 123, 00100 Roma, Italia</p>
                     <p><i class="fas fa-phone"></i> +39 06 12345678</p>
                     <p><i class="fas fa-envelope"></i> info@ecommercedoubao.it</p>
-                    <p><i class="fas fa-clock"></i> Lun-Ven: 9:00-18:00</p>
+                    <p><i class="fas fa-clock"></i> Lun-Dom: 00:00-23:59</p>
                     
                     <div class="payment-methods">
                         <i class="fab fa-cc-visa"></i>
