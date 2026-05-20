@@ -35,8 +35,8 @@ $products = $stmt->get_result();
             </nav>
         </div>
     </header>
-
-    <div class="container">
+    
+    <main class="container">
         <!-- AJAX热销商品区域 -->
         <h2><i class="fas fa-fire"></i> Più Venduti</h2>
         <div id="piu-venduti"></div>
@@ -97,7 +97,7 @@ $products = $stmt->get_result();
                 </div>
             <?php endif; ?>
         </section>
-    </div>
+            </main>
 
     <!-- 页脚（纯静态，不影响任何功能） -->
     <footer>
@@ -107,10 +107,10 @@ $products = $stmt->get_result();
                     <h3>E-commerce Doubao</h3>
                     <p>Il tuo negozio online di fiducia in Italia. Offriamo prodotti di qualità a prezzi competitivi con spedizione veloce in tutta Italia.</p>
                     <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-x"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f" aria-label="facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram" aria-label="instagram"></i></a>
+                        <a href="#"><i class="fab fa-x" aria-label="x"></i></a>
+                        <a href="#"><i class="fab fa-youtube" aria-label="youtube"></i></a>
                     </div>
                 </div>
 

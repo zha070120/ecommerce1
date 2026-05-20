@@ -9,8 +9,8 @@
     --primary: #2563eb;
     --primary-dark: #1d4ed8;
     --secondary: #f97316;
-    --success: #10b981;
-    --danger: #ef4444;
+    --success: #0D875E;
+    --danger: #EB1414;
     --warning: #f59e0b;
 
     --gray-50: #f9fafb;
@@ -113,8 +113,8 @@ nav a:hover {
 .btn:active {transform: translateY(0);}
 .btn-success {background: var(--success);}
 .btn-success:hover {background: #059669; box-shadow: 0 4px 12px rgba(16,185,129,0.3);}
-.btn-danger {background: var(--danger);}
-.btn-danger:hover {background: #dc2626;}
+.btn-danger {background: var(--danger); }
+.btn-danger:hover {background: #EB1414;}
 .btn-secondary {background: var(--gray-600);}
 .btn-secondary:hover {background: var(--gray-700); box-shadow: 0 4px 12px rgba(75,85,99,0.3);}
 
