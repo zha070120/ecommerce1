@@ -453,7 +453,7 @@ $stmt_prodotti->close(); // Chiudi lo statement
             </table>
         <?php else: ?>
             <!-- Stato vuoto: se il venditore non ha ancora aggiunto prodotti -->
-            <div class="empty-state">
+            <div class="empty-box">
                 <i class="fas fa-box-open"></i>
                 <p>Non hai ancora aggiunto prodotti al catalogo.</p>
                 <a href="#aggiungi" class="btn">

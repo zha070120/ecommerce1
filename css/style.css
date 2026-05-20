@@ -1,255 +1,152 @@
-/* ========================================
-   E-commerce Doubao - 全局统一样式表
-   精简优化版：合并重复代码，消除冗余，保留所有视觉效果
-   版本: 1.1
-   最后更新: 2026-05-18
-   适用范围: 整个电商网站所有页面
-   ======================================== */
-
-/* ========================================
-   基础重置模块
-   作用: 统一所有浏览器的默认样式，消除浏览器差异
-   ======================================== */
-/* 全局选择器: 应用于页面上所有元素 */
+/* 全局重置 & 基础变量 */
 * {
-    margin: 0;              /* 清除所有元素的默认外边距 */
-    padding: 0;             /* 清除所有元素的默认内边距 */
-    box-sizing: border-box; /* 统一盒模型: padding和border不会撑大元素宽度 */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* ========================================
-   CSS变量定义模块
-   作用: 全站统一的设计系统，所有颜色、阴影、圆角都在这里定义
-   优点: 修改全局样式只需要改这里，所有页面自动更新
-   ======================================== */
 :root {
-    /* 主色调系统 - 品牌色定义 */
-    --primary: #2563eb;         /* 主蓝色: 用于按钮、导航、强调元素 */
-    --primary-dark: #1d4ed8;    /* 主蓝色深色: 用于按钮hover状态 */
-    --secondary: #f97316;       /* 辅助橙色: 用于渐变、强调元素 */
-    --success: #10b981;         /* 成功绿色: 用于成功状态、库存充足标记 */
-    --danger: #ef4444;          /* 危险红色: 用于价格、删除按钮、错误提示 */
-    --warning: #f59e0b;         /* 警告黄色: 用于警告状态、收入统计 */
-    
-    /* 灰度系统 - 从浅到深的灰度色阶，统一文本和背景 */
-    --gray-50: #f9fafb;         /* 最浅灰: 页面背景色 */
-    --gray-100: #f3f4f6;       /* 浅灰: 卡片头部背景、禁用输入框背景 */
-    --gray-200: #e5e7eb;       /* 边框灰: 分割线、表格边框 */
-    --gray-300: #d1d5db;       /* 输入框边框灰: 默认输入框边框 */
-    --gray-600: #4b5563;       /* 次要文本灰: 说明文字、提示文字 */
-    --gray-700: #374151;       /* 标签文本灰: 表单标签、次要标题 */
-    --gray-800: #1f2937;       /* 主要文本灰: 正文、主标题 */
-    
-    /* 阴影系统 - 统一的阴影层级，营造层次感 */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);    /* 小阴影: 卡片、输入框默认阴影 */
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);  /* 中阴影: hover状态的阴影 */
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1); /* 大阴影: 悬浮卡片的阴影 */
-    
-    /* 其他全局变量 */
-    --radius: 8px;              /* 标准圆角: 按钮、输入框的圆角 */
-    --radius-lg: 12px;          /* 大圆角: 表格、空状态的圆角 */
-    --radius-xl: 16px;          /* 超大圆角: 卡片、表单的圆角 */
-    --trans: all 0.3s ease;     /* 统一过渡动画: 所有hover效果的过渡时间 */
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --secondary: #f97316;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+
+    --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+    --shadow-lg: 10px 15px -3px rgba(0,0,0,0.1);
+
+    --radius: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --trans: all 0.3s ease;
 }
 
-/* ========================================
-   全局基础样式模块
-   作用: 定义页面最基础的排版和样式
-   ======================================== */
 body {
-    /* 使用现代无衬线字体栈，确保跨平台一致性 */
-    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;           /* 舒适的行高，提高文本可读性 */
-    color: var(--gray-800);     /* 默认文本颜色，使用最深的灰色 */
-    background-color: var(--gray-50); /* 页面背景色，最浅的灰色 */
+    font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif;
+    line-height: 1.6;
+    color: var(--gray-800);
+    background: var(--gray-50);
 }
 
-/* 容器类: 限制内容最大宽度，居中对齐，统一内边距 */
 .container {
-    max-width: 1280px;          /* 最大内容宽度，防止大屏上内容过宽 */
-    margin: 0 auto;             /* 水平居中，让内容在页面中间 */
-    padding: 0 24px;            /* 左右内边距，移动端有呼吸空间 */
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
 }
 
-/* ========================================
-   导航栏样式模块
-   作用: 全站统一的顶部导航栏样式
-   特点: 固定在顶部，渐变背景，粘性定位
-   ======================================== */
+/* 导航栏 */
 header {
-    /* 渐变背景，从主蓝到浅蓝，营造现代感 */
-    background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
-    color: white;                 /* 导航栏文字默认白色 */
-    padding: 1rem 0;                /* 上下内边距，给导航栏高度 */
-    box-shadow: var(--shadow-md);   /* 导航栏阴影，与下方内容区分开 */
-    position: sticky;               /* 粘性定位，滚动时固定在顶部 */
-    top: 0;                         /* 固定在页面最顶部 */
-    z-index: 1000;                  /* 最高层级，确保导航栏在最上层 */
+    background: linear-gradient(135deg, var(--primary), #3b82f6);
+    color: #fff;
+    padding: 1rem 0;
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
-
-/* 导航栏容器: 特殊处理，比普通容器更宽 */
 header .container {
-    display: flex;                  /* 弹性布局，logo和导航左右分布 */
-    justify-content: space-between; /* 两端对齐 */
-    align-items: center;            /* 垂直居中 */
-    max-width: 100%;                /* 导航栏占满整个宽度 */
-    padding: 0 40px;                /* 更大的左右内边距 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100%;
+    padding: 0 40px;
     width: 100%;
 }
-
-/* Logo文字样式 */
 header h1 {
-    font-size: 1.75rem;         /* Logo字号，比普通文字大 */
-    font-weight: 700;           /* 加粗，突出品牌 */
-    margin: 0;                  /* 清除默认外边距 */
-    white-space: nowrap;        /* 防止Logo文字换行 */
-    flex-shrink: 0;             /* 防止在小屏上被压缩 */
+    font-size: 1.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
-
-/* 导航菜单容器 */
 nav {
-    display: flex;              /* 横向排列导航项 */
-    align-items: center;        /* 垂直居中 */
-    gap: 2rem;                  /* 导航项之间的间距 */
-    margin-left: auto;          /* 让导航菜单靠右对齐 */
-    flex-shrink: 0;             /* 防止压缩 */
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-left: auto;
+    flex-shrink: 0;
 }
-
-/* 导航链接样式 */
 nav a {
-    color: white;               /* 白色文字，在蓝色背景上清晰 */
-    text-decoration: none;      /* 去掉链接默认下划线 */
-    font-weight: 500;           /* 中等加粗，比普通文字重一点 */
-    transition: var(--trans);   /* 过渡动画，hover时平滑变化 */
-    padding: 0.5rem 0;          /* 上下内边距，增加点击区域 */
-    border-bottom: 2px solid transparent; /* 底部边框，hover时显示 */
-    white-space: nowrap;        /* 防止导航文字换行 */
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--trans);
+    padding: 0.5rem 0;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
 }
-
-/* 导航链接hover效果 */
 nav a:hover {
-    color: #fef3c7;             /* 悬停时变浅黄色，突出当前项 */
-    border-bottom: 2px solid #fef3c7; /* 显示底部边框，指示当前hover */
+    color: #fef3c7;
+    border-color: #fef3c7;
 }
 
-/* ========================================
-   按钮样式模块
-   作用: 全站统一的按钮系统
-   特点: 支持多种颜色变体，统一的hover效果
-   ======================================== */
-/* 基础按钮样式，所有按钮都继承这个 */
+/* 统一按钮组（合并所有按钮样式） */
 .btn {
-    display: inline-block;      /* 行内块，支持宽高，同时可以和文字同行 */
-    padding: 0.75rem 1.5rem;    /* 内边距，舒适的点击大小 */
-    background-color: var(--primary); /* 默认主蓝色背景 */
-    color: white;               /* 白色文字 */
-    border: none;               /* 去掉默认边框 */
-    border-radius: var(--radius); /* 标准圆角 */
-    cursor: pointer;            /* 鼠标指针变成手型 */
-    font-size: 0.95rem;         /* 字号，比普通文字稍小 */
-    font-weight: 600;           /* 加粗，按钮文字更突出 */
-    text-decoration: none;      /* 去掉链接的下划线 */
-    transition: var(--trans);   /* 过渡动画，hover平滑变化 */
-    text-align: center;         /* 文字居中 */
-    box-shadow: var(--shadow-sm); /* 小阴影，让按钮有浮起感 */
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--trans);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
 }
-
-/* 按钮hover效果 */
 .btn:hover {
-    background-color: var(--primary-dark); /* 背景变深，反馈hover */
-    transform: translateY(-1px); /* 轻微上移，有按压感 */
-    box-shadow: var(--shadow-md); /* 更大的阴影，更突出 */
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
 }
+.btn:active {transform: translateY(0);}
+.btn-success {background: var(--success);}
+.btn-success:hover {background: #059669; box-shadow: 0 4px 12px rgba(16,185,129,0.3);}
+.btn-danger {background: var(--danger);}
+.btn-danger:hover {background: #dc2626;}
+.btn-secondary {background: var(--gray-600);}
+.btn-secondary:hover {background: var(--gray-700); box-shadow: 0 4px 12px rgba(75,85,99,0.3);}
 
-/* 按钮点击效果 */
-.btn:active {
-    transform: translateY(0);   /* 点击时回到原位 */
-}
-
-/* 成功按钮 - 绿色，用于确认、添加等操作 */
-.btn-success {
-    background-color: var(--success);
-}
-
-.btn-success:hover {
-    background-color: #059669;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-}
-
-/* 危险按钮 - 红色，用于删除、取消等操作 */
-.btn-danger {
-    background-color: var(--danger);
-}
-
-.btn-danger:hover {
-    background-color: #dc2626;
-}
-
-/* 次要按钮 - 灰色，用于次要操作 */
-.btn-secondary {
-    background-color: var(--gray-600);
-}
-
-.btn-secondary:hover {
-    background-color: var(--gray-700);
-    box-shadow: 0 4px 12px rgba(75, 85, 99, 0.3);
-}
-
-/* 小按钮 - 用于表格操作列，更小的尺寸 */
-.btn-sm {
-    padding: 0.5rem 1rem;       /* 更小的内边距 */
-    font-size: 0.85rem;         /* 更小的字号 */
-}
-
-/* ========================================
-   标题样式模块
-   作用: 全站统一的标题系统
-   特点: 带渐变下划线的二级标题
-   ======================================== */
-/* 页面主标题，每个页面的大标题 */
+/* 标题统一样式 */
 h2 {
-    font-size: 1.875rem;        /* 30px，大字号 */
-    margin: 3rem 0 1.5rem;     /* 上下外边距，与其他内容分隔 */
-    color: var(--gray-800);     /* 深色文字 */
-    position: relative;         /* 相对定位，用于伪元素下划线 */
-    padding-bottom: 0.75rem;    /* 底部内边距，给下划线留空间 */
-    font-weight: 700;           /* 加粗 */
+    font-size: 1.875rem;
+    margin: 3rem 0 1.5rem;
+    color: var(--gray-800);
+    position: relative;
+    padding-bottom: 0.75rem;
+    font-weight: 700;
 }
-
-/* 标题下方的渐变下划线，装饰用 */
 h2::after {
     content: '';
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 80px;                /* 下划线长度，不要太长 */
-    height: 4px;                /* 下划线高度 */
-    background: linear-gradient(90deg, var(--primary), var(--secondary)); /* 从蓝到橙的渐变 */
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg,var(--primary),var(--secondary));
     border-radius: 2px;
 }
-
-/* 区块标题，每个模块的小标题 */
 h3 {
-    font-size: 1.375rem;        /* 22px */
+    font-size: 1.375rem;
     margin-bottom: 1.5rem;
     color: var(--gray-800);
     font-weight: 600;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--gray-200); /* 浅灰色下划线 */
+    border-bottom: 1px solid var(--gray-200);
 }
 
-/* 副标题，主标题下方的说明文字 */
-.subtitle {
-    color: var(--gray-600);
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-}
-
-/* ========================================
-   提示框样式模块
-   作用: 全站统一的消息提示
-   用途: 用于错误、成功等消息展示
-   ======================================== */
+/* 提示框 */
 .alert {
     padding: 1rem 1.5rem;
     border-radius: var(--radius);
@@ -259,41 +156,19 @@ h3 {
     align-items: center;
     gap: 0.5rem;
 }
+.alert-danger {background: #fef2f2; color: #dc2626; border:1px solid #fecaca;}
+.alert-success {background: #f0fdf4; color: #166534; border:1px solid #bbf7d0;}
 
-/* 错误提示 - 红色，用于错误消息 */
-.alert-danger {
-    background-color: #fef2f2;
-    color: #dc2626;
-    border: 1px solid #fecaca;
-}
-
-/* 成功提示 - 绿色，用于成功消息 */
-.alert-success {
-    background-color: #f0fdf4;
-    color: #166534;
-    border: 1px solid #bbf7d0;
-}
-
-/* ========================================
-   表单样式模块
-   作用: 全站统一的表单系统
-   特点: 统一的输入框、标签、间距
-   ======================================== */
-/* 表单卡片: 包裹整个表单的白色卡片 */
-.form-card {
-    background: white;
+/* 表单通用 */
+.form-card,.login-wrap,.register-wrap {
+    background: #fff;
     padding: 2.5rem;
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-sm);
     margin-bottom: 2rem;
 }
-
-/* 表单组: 标签+输入框的组合 */
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-/* 表单标签 */
+.login-wrap,.register-wrap {max-width: 580px; margin:4rem auto;}
+.form-group {margin-bottom: 1.5rem;}
 .form-group label {
     display: block;
     margin-bottom: 0.6rem;
@@ -301,8 +176,6 @@ h3 {
     color: var(--gray-700);
     font-size: 0.95rem;
 }
-
-/* 表单输入框 */
 .form-group input {
     width: 100%;
     padding: 0.9rem 1rem;
@@ -311,194 +184,73 @@ h3 {
     font-size: 1rem;
     transition: var(--trans);
 }
-
-/* 输入框聚焦状态 */
 .form-group input:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
 }
+.form-group input:disabled {background: var(--gray-100); cursor:not-allowed; color:var(--gray-600);}
+.form-group small {display:block; margin-top:0.5rem; color:var(--gray-600); font-size:0.85rem;}
+.form-actions {display:flex; justify-content:flex-end; gap:1rem; margin-top:0.5rem; flex-wrap:wrap;}
 
-/* 禁用状态的输入框 */
-.form-group input:disabled {
-    background-color: var(--gray-100);
-    cursor: not-allowed;
-    color: var(--gray-600);
-}
-
-/* 输入框下方的小提示文字 */
-.form-group small {
-    display: block;
-    margin-top: 0.5rem;
-    color: var(--gray-600);
-    font-size: 0.85rem;
-}
-
-/* 表单按钮区域: 按钮靠右对齐 */
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 0.5rem;
-    flex-wrap: wrap;
-}
-
-/* 登录/注册表单卡片: 居中的表单 */
-.login-wrap, .register-wrap {
-    max-width: 580px;           /* 最大宽度，不要太宽 */
-    margin: 4rem auto;          /* 上下外边距，水平居中 */
-    background: white;
-    padding: 2.5rem;
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-sm);
-}
-
-/* ========================================
-   通用表格样式模块
-   作用: 全站统一的表格系统
-   特点: 圆角表格，hover效果，统一的内边距
-   ======================================== */
+/* 表格通用 */
 table {
     width: 100%;
-    border-collapse: separate;  /* 分离边框，支持圆角 */
-    border-spacing: 0;          /* 去掉单元格间距 */
-    background-color: white;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
     border-radius: var(--radius-lg);
-    overflow: hidden;           /* 溢出隐藏，让圆角生效 */
+    overflow: hidden;
     box-shadow: var(--shadow-sm);
     margin-bottom: 4rem;
 }
-
-/* 表头 */
 table th {
-    background-color: var(--primary); /* 主蓝色表头 */
-    color: white;
+    background: var(--primary);
+    color: #fff;
     padding: 1rem 1.5rem;
     text-align: left;
     font-weight: 600;
     font-size: 0.95rem;
     vertical-align: middle;
 }
-
-/* 表格单元格 */
 table td {
     padding: 1.25rem 1.5rem;
     border-bottom: 1px solid var(--gray-200);
     vertical-align: middle;
 }
+table tbody tr {transition: background 0.2s ease;}
+table tbody tr:hover {background: var(--gray-50);}
+table tbody tr:last-child td {border-bottom: none;}
+table tfoot {background:var(--gray-50); font-size:1.1rem;}
+table tfoot td {padding:1.25rem 1.5rem; font-weight:700; border-top:2px solid var(--gray-200);}
+.order-table th {background:var(--gray-100); color:var(--gray-700);}
 
-/* 表格行hover效果 */
-table tbody tr {
-    transition: background-color 0.2s ease;
-}
-
-table tbody tr:hover {
-    background-color: var(--gray-50);
-}
-
-/* 最后一行去掉下边框 */
-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-/* 表格页脚: 用于购物车总计 */
-table tfoot {
-    background-color: var(--gray-50);
-    font-size: 1.1rem;
-}
-
-table tfoot td {
-    padding: 1.25rem 1.5rem;
-    font-weight: 700;
-    border-top: 2px solid var(--gray-200);
-}
-
-/* 订单表格差异化样式: 表头用灰色而不是蓝色 */
-.order-table th {
-    background-color: var(--gray-100);
-    color: var(--gray-700);
-}
-
-/* ========================================
-   通用卡片样式模块
-   作用: 全站统一的基础卡片
-   ======================================== */
-.card {
-    background-color: white;
+/* 通用卡片合并 */
+.card,.order-card {
+    background: #fff;
     border-radius: var(--radius-xl);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
     transition: var(--trans);
 }
-
-.card:hover {
-    box-shadow: var(--shadow-md);
-}
-
-.card-header {
-    background-color: var(--gray-50);
-    padding: 1.5rem;
-    border-bottom: 1px solid var(--gray-200);
-}
-
-.card-body {
-    padding: 1.5rem;
-}
-
-/* ========================================
-   订单卡片样式模块
-   作用: 客户/卖家订单页通用
-   用途: 用于展示单个订单的详细信息
-   ======================================== */
-.order-card {
-    background-color: white;
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    margin-bottom: 2rem;
-    transition: var(--trans);
-}
-
-.order-card:hover {
-    box-shadow: var(--shadow-md);
-}
-
-/* 订单头部: 订单号、日期、客户信息等 */
+.card:hover,.order-card:hover {box-shadow: var(--shadow-md);}
+.card-header {background:var(--gray-50); padding:1.5rem; border-bottom:1px solid var(--gray-200);}
+.card-body {padding:1.5rem;}
+.order-card {margin-bottom:2rem;}
 .order-header {
-    background-color: var(--gray-50);
+    background: var(--gray-50);
     padding: 1.5rem;
     border-bottom: 1px solid var(--gray-200);
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+    gap:1rem;
 }
+.order-header h3 {grid-column:1/-1; border:none; padding:0; margin:0; font-size:1.25rem;}
+.order-info {display:flex; flex-direction:column; gap:0.25rem;}
+.order-info p {margin:0; color:var(--gray-600);}
+.order-info strong {color:var(--gray-800);}
 
-.order-header h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--gray-800);
-    margin: 0;
-    grid-column: 1 / -1;
-    border-bottom: none;
-    padding-bottom: 0;
-}
-
-.order-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.order-info p {
-    margin: 0;
-    color: var(--gray-600);
-}
-
-.order-info strong {
-    color: var(--gray-800);
-}
-
-/* 订单状态标签: 不同状态不同颜色 */
+/* 订单状态标签 */
 .status-badge {
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
@@ -506,574 +258,176 @@ table tfoot td {
     font-weight: 600;
     display: inline-block;
 }
+.status-attivo,.status-in-lavorazione {background:#dbeafe; color:#1e40af;}
+.status-spedito {background:#fef3c7; color:#92400e;}
+.status-consegnato {background:#dcfce7; color:#166534;}
+.status-annullato {background:#fee2e2; color:#991b1b;}
 
-/* 活跃/处理中 - 蓝色 */
-.status-attivo, .status-in-lavorazione {
-    background-color: #dbeafe;
-    color: #1e40af;
-}
-
-/* 已发货 - 黄色 */
-.status-spedito {
-    background-color: #fef3c7;
-    color: #92400e;
-}
-
-/* 已交付 - 绿色 */
-.status-consegnato {
-    background-color: #dcfce7;
-    color: #166534;
-}
-
-/* 已取消 - 红色 */
-.status-annullato {
-    background-color: #fee2e2;
-    color: #991b1b;
-}
-
-/* 状态更新表单: 卖家修改订单状态 */
 .status-update {
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--gray-200);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
+    padding:1rem 1.5rem;
+    border-bottom:1px solid var(--gray-200);
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    flex-wrap:wrap;
 }
-
-.status-update label {
-    font-weight: 500;
-    color: var(--gray-700);
-}
-
+.status-update label {font-weight:500; color:var(--gray-700);}
 .status-update select {
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--gray-300);
-    border-radius: var(--radius);
-    font-size: 0.95rem;
-    background-color: white;
-    cursor: pointer;
+    padding:0.75rem 1rem;
+    border:1px solid var(--gray-300);
+    border-radius:var(--radius);
+    font-size:0.95rem;
+    background:#fff;
+    cursor:pointer;
 }
+.status-update select:focus {outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(37,99,235,0.1);}
+.non-modificabile {padding:1rem 1.5rem; border-bottom:1px solid var(--gray-200); color:var(--gray-600); font-style:italic; display:flex; align-items:center; gap:0.5rem;}
 
-.status-update select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-/* 不可修改状态的提示 */
-.non-modificabile {
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--gray-200);
-    color: var(--gray-600);
-    font-style: italic;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-/* ========================================
-   通用空状态样式模块
-   作用: 全站统一
-   用途: 用于空购物车、空订单、空商品列表等
-   特点: 统一的居中提示，大图标
-   ======================================== */
+/* 空状态 */
 .empty-box {
     text-align: center;
     padding: 5rem 2rem;
-    background-color: white;
+    background: #fff;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
 }
+.empty-box i {font-size:5rem; color:var(--gray-300); margin-bottom:1.5rem;}
+.empty-box p {font-size:1.25rem; color:var(--gray-600); margin-bottom:2rem;}
 
-.empty-box i {
-    font-size: 5rem;
-    color: var(--gray-300);
-    margin-bottom: 1.5rem;
-}
-
-.empty-box p {
-    font-size: 1.25rem;
-    color: var(--gray-600);
-    margin-bottom: 2rem;
-}
-
-/* ========================================
-   商品通用卡片样式模块
-   作用: 首页商品和畅销商品的公共样式
-   ======================================== */
-/* 三个商品卡片的共同样式 */
-.prod-card-base,
-.product-card,
-.piu-venduto-item {
-    background: white;
+/* 商品卡片【超级合并：3个商品类合并为统一父类】 */
+.prod-card-base,.product-card,.piu-venduto-item {
+    background: #fff;
     padding: 1.5rem;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
     text-align: center;
     transition: var(--trans);
 }
-
-/* 共同的hover效果 */
-.prod-card-base:hover,
-.product-card:hover,
-.piu-venduto-item:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
+.prod-card-base:hover,.product-card:hover,.piu-venduto-item:hover {transform:translateY(-3px); box-shadow:var(--shadow-md);}
+.prod-card-base img,.product-card img,.piu-venduto-item img {
+    width:100%;
+    height:200px;
+    object-fit:cover;
+    border-radius:var(--radius);
+    margin-bottom:1rem;
 }
+.prod-card-base h4,.product-card h4,.piu-venduto-item h4 {margin-bottom:0.5rem; font-size:1.1rem; color:var(--gray-800);}
+.prod-card-base .price,.product-card .price,.piu-venduto-item .price {color:var(--danger); font-weight:bold; font-size:1.2rem; margin:0;}
 
-/* 共同的图片样式 */
-.prod-card-base img,
-.product-card img,
-.piu-venduto-item img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: var(--radius);
-    margin-bottom: 1rem;
-}
+.product-card:hover {transform:translateY(-5px); box-shadow:var(--shadow-lg);}
+.image-container {width:100%; height:200px; overflow:hidden; border-radius:var(--radius); margin-bottom:1rem;}
+.image-container img {width:100%; height:100%; object-fit:cover; transition:var(--trans);}
+.product-card:hover .image-container img {transform:scale(1.05);}
+.in-stock {color:var(--success); margin-right:0.5rem;}
 
-/* 共同的标题样式 */
-.prod-card-base h4,
-.product-card h4,
-.piu-venduto-item h4 {
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
-    color: var(--gray-800);
-}
-
-/* 共同的价格样式 */
-.prod-card-base .price,
-.product-card .price,
-.piu-venduto-item .price {
-    color: var(--danger);
-    font-weight: bold;
-    font-size: 1.2rem;
-    margin: 0;
-}
-
-/* 首页商品网格布局 */
-.product-grid {
+.product-grid,.piu-venduto-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-bottom: 4rem;
+    grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+    gap:2rem;
+    margin-bottom:4rem;
 }
 
-/* 首页商品卡片特殊hover效果: 上移更多 */
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-}
-
-/* 图片容器: 用于图片缩放效果 */
-.image-container {
-    width: 100%;
-    height: 200px;
-    overflow: hidden;
-    border-radius: var(--radius);
-    margin-bottom: 1rem;
-}
-
-.image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: var(--trans);
-}
-
-/* hover时图片轻微放大 */
-.product-card:hover .image-container img {
-    transform: scale(1.05);
-}
-
-/* 库存充足标记 */
-.in-stock {
-    color: var(--success);
-    margin-right: 0.5rem;
-}
-
-/* 最畅销商品区域 */
-#piu-venduto-products {
-    margin-bottom: 4.5rem;
-    padding-bottom: 2.5rem;
-    border-bottom: 1px solid var(--gray-200);
-}
-
-.piu-venduto-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
-}
-
-/* ========================================
-   AJAX加载状态样式模块
-   作用: 用于首页AJAX加载畅销商品时的loading
-   ======================================== */
-.loading {
-    text-align: center;
-    color: var(--gray-600);
-    padding: 3rem;
-    font-size: 1.1rem;
-}
-
-/* 加载动画: 旋转的小圆圈 */
+/* 加载动画 */
+.loading {text-align:center; color:var(--gray-600); padding:3rem; font-size:1.1rem;}
 .loading::after {
-    content: "";
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid var(--primary);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-left: 10px;
-    vertical-align: middle;
+    content:"";
+    display:inline-block;
+    width:20px;
+    height:20px;
+    border:3px solid #f3f3f3;
+    border-top:3px solid var(--primary);
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    margin-left:10px;
+    vertical-align:middle;
 }
+@keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+.error {text-align:center; color:var(--danger); padding:2rem; background:#fdf2f2; border-radius:var(--radius); border:1px solid #fecaca;}
 
-/* 旋转动画 */
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* 加载错误状态 */
-.error {
-    text-align: center;
-    color: var(--danger);
-    padding: 2rem;
-    background-color: #fdf2f2;
-    border-radius: var(--radius);
-    border: 1px solid #fecaca;
-}
-
-/* ========================================
-   卖家仪表盘统计卡片样式模块
-   作用: 三个统计卡片: 商品数、订单数、收入
-   ======================================== */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
-    margin: 2rem 0 4rem;
-}
-
+/* 统计卡片 */
+.stats-grid {display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:2rem; margin:2rem 0 4rem;}
 .stat-card {
-    background: white;
-    padding: 2.5rem 2rem;
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-sm);
-    text-align: center;
-    transition: var(--trans);
-    position: relative;
-    overflow: hidden;
+    background:#fff;
+    padding:2.5rem 2rem;
+    border-radius:var(--radius-xl);
+    box-shadow:var(--shadow-sm);
+    text-align:center;
+    transition:var(--trans);
+    position:relative;
+    overflow:hidden;
 }
-
-.stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-}
-
-/* 顶部彩色条 */
-.stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-}
-
-/* 商品统计卡片 - 蓝色条 */
-.stat-card.products::before {
-    background-color: var(--primary);
-}
-
-/* 订单统计卡片 - 绿色条 */
-.stat-card.orders::before {
-    background-color: var(--success);
-}
-
-/* 收入统计卡片 - 黄色条 */
-.stat-card.revenue::before {
-    background-color: var(--warning);
-}
-
-/* 图标容器 */
+.stat-card:hover {transform:translateY(-5px); box-shadow:var(--shadow-lg);}
+.stat-card::before {content:''; position:absolute; top:0; left:0; width:100%; height:4px;}
+.stat-card.products::before {background:var(--primary);}
+.stat-card.orders::before {background:var(--success);}
+.stat-card.revenue::before {background:var(--warning);}
 .stat-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem;
-    font-size: 1.75rem;
+    width:64px;
+    height:64px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 1.5rem;
+    font-size:1.75rem;
 }
+.stat-card.products .stat-icon {background:rgba(37,99,235,0.1); color:var(--primary);}
+.stat-card.orders .stat-icon {background:rgba(16,185,129,0.1); color:var(--success);}
+.stat-card.revenue .stat-icon {background:rgba(245,158,11,0.1); color:var(--warning);}
+.stat-card h4 {font-size:1.1rem; color:var(--gray-600); margin-bottom:1rem; font-weight:500;}
+.stat-card h3 {font-size:2.75rem; font-weight:700; margin-bottom:1.5rem; line-height:1.2; border:none; padding:0;}
+.stat-card.products h3 {color:var(--primary);}
+.stat-card.orders h3 {color:var(--success);}
+.stat-card.revenue h3 {color:var(--warning);}
 
-/* 商品图标背景色 */
-.stat-card.products .stat-icon {
-    background-color: rgba(37, 99, 235, 0.1);
-    color: var(--primary);
-}
+/* 卖家管理专属 */
+.product-img-preview {max-width:200px; max-height:200px; margin-top:1rem; border-radius:var(--radius); box-shadow:var(--shadow-sm); object-fit:cover;}
+.product-img-table {width:60px; height:60px; object-fit:cover; border-radius:var(--radius); box-shadow:var(--shadow-sm);}
+.stock {font-weight:500; color:var(--success);}
+.action-buttons {display:flex; gap:0.5rem; flex-wrap:wrap;}
+.action-buttons .btn {padding:0.5rem 1rem; font-size:0.85rem;}
 
-/* 订单图标背景色 */
-.stat-card.orders .stat-icon {
-    background-color: rgba(16, 185, 129, 0.1);
-    color: var(--success);
-}
-
-/* 收入图标背景色 */
-.stat-card.revenue .stat-icon {
-    background-color: rgba(245, 158, 11, 0.1);
-    color: var(--warning);
-}
-
-.stat-card h4 {
-    font-size: 1.1rem;
-    color: var(--gray-600);
-    margin-bottom: 1rem;
-    font-weight: 500;
-}
-
-.stat-card h3 {
-    font-size: 2.75rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    line-height: 1.2;
-    border-bottom: none;
-    padding-bottom: 0;
-}
-
-/* 数字颜色 */
-.stat-card.products h3 {
-    color: var(--primary);
-}
-
-.stat-card.orders h3 {
-    color: var(--success);
-}
-
-.stat-card.revenue h3 {
-    color: var(--warning);
-}
-
-/* ========================================
-   卖家产品管理页面专属样式模块
-   ======================================== */
-/* 产品图片预览: 添加产品时的图片预览 */
-.product-img-preview {
-    max-width: 200px;
-    max-height: 200px;
-    margin-top: 1rem;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-sm);
-    object-fit: cover;
-}
-
-/* 表格中的产品小图 */
-.product-img-table {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-sm);
-}
-
-/* 库存状态 */
-.stock {
-    font-weight: 500;
-    color: var(--success);
-}
-
-/* 操作按钮组 */
-.action-buttons {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.action-buttons .btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
-}
-
-/* ========================================
-   页脚样式模块
-   ======================================== */
-footer {
-    background-color: var(--gray-800);
-    color: white;
-    padding: 3rem 0 1rem;
-    margin-top: 4rem;
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.footer-section h3 {
-    color: white;
-    border-bottom: 2px solid var(--primary);
-    padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.footer-section p {
-    margin-bottom: 1rem;
-    color: var(--gray-300);
-    line-height: 1.6;
-}
-
-.footer-section ul {
-    list-style: none;
-    padding: 0;
-}
-
-.footer-section ul li {
-    margin-bottom: 0.5rem;
-}
-
-.footer-section ul li a {
-    color: var(--gray-300);
-    text-decoration: none;
-    transition: var(--trans);
-}
-
-.footer-section ul li a:hover {
-    color: white;
-    padding-left: 5px;
-}
-
-.social-icons {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
+/* 页脚 */
+footer {background:var(--gray-800); color:#fff; padding:3rem 0 1rem; margin-top:4rem;}
+.footer-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:2rem; margin-bottom:2rem;}
+.footer-section h3 {color:#fff; border-bottom:2px solid var(--primary); padding-bottom:0.5rem; margin-bottom:1rem;}
+.footer-section p {margin-bottom:1rem; color:var(--gray-300); line-height:1.6;}
+.footer-section ul {list-style:none; padding:0;}
+.footer-section ul li {margin-bottom:0.5rem;}
+.footer-section ul li a {color:var(--gray-300); text-decoration:none; transition:var(--trans);}
+.footer-section ul li a:hover {color:#fff; padding-left:5px;}
+.social-icons {display:flex; gap:1rem; margin-top:1rem;}
 .social-icons a {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--gray-700);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    transition: var(--trans);
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:var(--gray-700);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    transition:var(--trans);
 }
+.social-icons a:hover {background:var(--primary); transform:translateY(-3px);}
+.payment-methods {display:flex; gap:1rem; margin-top:1rem; font-size:2rem; color:var(--gray-300);}
+.footer-bottom {text-align:center; padding-top:2rem; border-top:1px solid var(--gray-700); color:var(--gray-400);}
 
-.social-icons a:hover {
-    background-color: var(--primary);
-    transform: translateY(-3px);
+/* 响应式【合并所有媒体查询，无重复】 */
+@media (max-width:768px) {
+    header .container {flex-direction:column; gap:1rem; padding:0 24px;}
+    nav {margin:0; justify-content:center; width:100%; flex-wrap:wrap;}
+    h2 {font-size:1.5rem;}
+    .form-card,.login-wrap,.register-wrap {padding:1.8rem; margin:2rem auto;}
+    .form-actions,.checkout-actions,.status-update {flex-direction:column; align-items:stretch;}
+    table {display:block; overflow-x:auto;}
+    table th,table td {padding:1rem; white-space:nowrap;}
+    .order-header {grid-template-columns:1fr;}
+    .footer-grid {grid-template-columns:1fr; text-align:center;}
+    .social-icons,.payment-methods {justify-content:center;}
 }
-
-.payment-methods {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-    font-size: 2rem;
-    color: var(--gray-300);
-}
-
-.footer-bottom {
-    text-align: center;
-    padding-top: 2rem;
-    border-top: 1px solid var(--gray-700);
-    color: var(--gray-400);
-}
-
-/* ========================================
-   唯一一份全局响应式模块
-   作用: 全站统一的响应式适配
-   特点: 所有响应式样式都在这里，避免分散
-   ======================================== */
-/* 平板设备: 768px以下 */
-@media (max-width: 768px) {
-    /* 导航栏垂直堆叠 */
-    header .container {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 0 24px;
-    }
-    
-    nav {
-        margin-left: 0;
-        justify-content: center;
-        width: 100%;
-        flex-wrap: wrap;
-    }
-    
-    /* 标题缩小 */
-    h2 {
-        font-size: 1.5rem;
-    }
-    
-    /* 表单卡片内边距缩小 */
-    .form-card,
-    .login-wrap, .register-wrap {
-        padding: 1.8rem;
-        margin: 2rem auto;
-    }
-    
-    /* 按钮区域垂直堆叠 */
-    .form-actions,
-    .checkout-actions,
-    .status-update {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    /* 表格横向滚动 */
-    table, .order-table {
-        display: block;
-        overflow-x: auto;
-    }
-    
-    table th, table td,
-    .order-table th, .order-table td {
-        padding: 1rem;
-        white-space: nowrap;
-    }
-    
-    /* 订单头部垂直堆叠 */
-    .order-header {
-        grid-template-columns: 1fr;
-    }
-    
-    .cancel-button-container {
-        text-align: center;
-    }
-    
-    /* 页脚垂直堆叠 */
-    .footer-grid {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    
-    .social-icons, .payment-methods {
-        justify-content: center;
-    }
-}
-
-/* 手机设备: 480px以下 */
-@media (max-width: 480px) {
-    /* 按钮缩小 */
-    .btn {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.9rem;
-    }
-    
-    /* 空状态缩小 */
-    .empty-box {
-        padding: 3rem 1.5rem;
-    }
-    
-    .empty-box i {
-        font-size: 4rem;
-    }
+@media (max-width:480px) {
+    .btn {padding:0.6rem 1.2rem; font-size:0.9rem;}
+    .empty-box {padding:3rem 1.5rem;}
+    .empty-box i {font-size:4rem;}
 }

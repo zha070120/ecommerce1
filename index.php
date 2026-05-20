@@ -91,7 +91,7 @@ $products = $stmt->get_result();
                     <?php endwhile; ?>
                 </div>
             <?php else: ?>
-                <div class="empty-state">
+                <div class="empty-box">
                     <i class="fas fa-box-open"></i>
                     <p>Nessun prodotto nel database</p>
                 </div>
