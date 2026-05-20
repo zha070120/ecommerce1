@@ -9,9 +9,6 @@
  * - Eliminare prodotti dal catalogo
  * - Caricare e gestire le immagini dei prodotti
  * 
- * @author Sviluppatore E-commerce
- * @version 1.0
- * @package AreaVenditori
  */
 
 // Includi il file di configurazione del database e le funzioni generali

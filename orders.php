@@ -2,10 +2,7 @@
 include 'config.php';
 
 // 验证登录状态，安全获取会话数据
-if (!isset($_SESSION['user_email'])) {
-    header("Location: login.php");
-    exit;
-}
+richiedi_login_cliente();
 $user_email = $_SESSION['user_email'] ?? '';
 $messaggio_errore = '';
 

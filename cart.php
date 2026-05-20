@@ -1,10 +1,8 @@
 <?php include 'config.php';
 
 // 验证用户登录状态
-if (!isset($_SESSION['user_email'])) {
-    header("Location: login.php");
-    exit;
-}
+richiedi_login_cliente();
+
 
 $cart_id = $_SESSION['cart_id'];
 $total = 0;

@@ -79,21 +79,21 @@ body {
 header {
     /* 渐变背景，从主蓝到浅蓝，营造现代感 */
     background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
-    color: white;               /* 导航栏文字默认白色 */
-    padding: 1rem 0;            /* 上下内边距，给导航栏高度 */
-    box-shadow: var(--shadow-md); /* 导航栏阴影，与下方内容区分开 */
-    position: sticky;           /* 粘性定位，滚动时固定在顶部 */
-    top: 0;                     /* 固定在页面最顶部 */
-    z-index: 1000;              /* 最高层级，确保导航栏在最上层 */
+    color: white;                 /* 导航栏文字默认白色 */
+    padding: 1rem 0;                /* 上下内边距，给导航栏高度 */
+    box-shadow: var(--shadow-md);   /* 导航栏阴影，与下方内容区分开 */
+    position: sticky;               /* 粘性定位，滚动时固定在顶部 */
+    top: 0;                         /* 固定在页面最顶部 */
+    z-index: 1000;                  /* 最高层级，确保导航栏在最上层 */
 }
 
 /* 导航栏容器: 特殊处理，比普通容器更宽 */
 header .container {
-    display: flex;              /* 弹性布局，logo和导航左右分布 */
+    display: flex;                  /* 弹性布局，logo和导航左右分布 */
     justify-content: space-between; /* 两端对齐 */
-    align-items: center;        /* 垂直居中 */
-    max-width: 100%;            /* 导航栏占满整个宽度 */
-    padding: 0 40px;            /* 更大的左右内边距 */
+    align-items: center;            /* 垂直居中 */
+    max-width: 100%;                /* 导航栏占满整个宽度 */
+    padding: 0 40px;                /* 更大的左右内边距 */
     width: 100%;
 }
 
