@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 127.0.0.1
--- 生成日期： 2026-05-09 22:49:32
+-- 生成日期： 2026-05-24 14:18:44
 -- 服务器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -37,7 +37,7 @@ CREATE TABLE `carello` (
 --
 
 INSERT INTO `carello` (`id_carello`, `email`) VALUES
-(1, 'aaa@gmail.com');
+(4, 'aaa@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -59,7 +59,7 @@ CREATE TABLE `cliente` (
 --
 
 INSERT INTO `cliente` (`email`, `nome`, `cognome`, `indirizzo`, `cap`, `password`) VALUES
-('aaa@gmail.com', 'aa', 'bb', 'saasl', '30125', '$2y$10$QjPTudHpA3ZaJVEX.1t1dOjVmRZvtUbbImAQstknE6k1R6/duDVNK');
+('aaa@gmail.com', 'shabi', 'nishi', 'via laoshishizhu', '123456', '$2y$10$/SDdwmZWv3I4ACwmufMGneSTZ1ORkjL3GFTvlmm2JMGl2h25H2tdO');
 
 -- --------------------------------------------------------
 
@@ -79,10 +79,7 @@ CREATE TABLE `ordine` (
 --
 
 INSERT INTO `ordine` (`id_ordine`, `email`, `data_ordine`, `stato_ordine`) VALUES
-(1, 'aaa@gmail.com', '2026-05-06', 'attivo'),
-(2, 'aaa@gmail.com', '2026-05-07', 'annullato'),
-(3, 'aaa@gmail.com', '2026-05-07', 'attivo'),
-(4, 'aaa@gmail.com', '2026-05-07', 'consegnato');
+(19, 'aaa@gmail.com', '2026-05-24', 'consegnato');
 
 -- --------------------------------------------------------
 
@@ -104,11 +101,8 @@ CREATE TABLE `prodotto` (
 --
 
 INSERT INTO `prodotto` (`id_prodotto`, `nome`, `prezzo`, `p_iva`, `quantita_disponibile`, `indirizzo_img`) VALUES
-(1, 'Smartphone X1', 299.99, '0123456789012', 50, 'https://picsum.photos/300/300?random=1'),
-(2, 'Laptop Pro 15', 899.90, '0123456789012', 14, 'https://picsum.photos/300/300?random=2'),
-(3, 'Maglia Cotone Uomo', 29.90, '0123456789012', 100, 'https://picsum.photos/300/300?random=3'),
-(4, 'Jeans Slim Donna', 49.99, '0123456789012', 75, 'https://picsum.photos/300/300?random=4'),
-(5, 'matita', 2.00, '88888888', 995, 'https://picsum.photos/300/300?random=5');
+(10, 'telefono', 888.00, '999999999', 12, 'img/prodotti/prod_6a12e9c7bb61d_1779624391.jpg'),
+(11, 'computer', 1234.00, '88888888', 30, 'img/prodotti/prod_6a12eaa2c8410_1779624610.jpg');
 
 -- --------------------------------------------------------
 
@@ -141,10 +135,8 @@ CREATE TABLE `p_o` (
 --
 
 INSERT INTO `p_o` (`id_prodotto`, `id_ordine`, `pezzi`, `prezzo_singolo`, `prezzo_tot`) VALUES
-(2, 1, 1, 899.90, 899.90),
-(2, 3, 5, 899.90, 4499.50),
-(3, 2, 5, 29.90, 149.50),
-(5, 4, 5, 2.00, 10.00);
+(10, 19, 1, 888.00, 888.00),
+(11, 19, 1, 1234.00, 1234.00);
 
 -- --------------------------------------------------------
 
@@ -165,8 +157,8 @@ CREATE TABLE `venditore` (
 --
 
 INSERT INTO `venditore` (`p_iva`, `ragione_sociale`, `indirizzo`, `cap`, `password`) VALUES
-('0123456789012', 'Elettronica SRL', 'Via Roma 123, Milano', '20100', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'),
-('88888888', 'shabi', 'via aaaaaaaaaaaaaaaaa', '33333', '$2y$10$dPr4Lfgrf2BKtD8we/JhdelYGd/6U45fQgU1dVmAdCPPIFRzBx/pO');
+('88888888', 'caonima', 'San polo', '30125', '$2y$10$si9wSWasiZ5VnogE1mi15eq7xQXx2f61j8Q9x0cSolEmS.CWmiAe2'),
+('999999999', 'nishizhuma', '', '99999999', '$2y$10$uWTdG3V3JVagJ2m8CMXRQus3QenKuNq6VDmMSPD37O.hujJBKw5qG');
 
 --
 -- 转储表的索引
@@ -227,19 +219,19 @@ ALTER TABLE `venditore`
 -- 使用表AUTO_INCREMENT `carello`
 --
 ALTER TABLE `carello`
-  MODIFY `id_carello` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID univoco carrello', AUTO_INCREMENT=2;
+  MODIFY `id_carello` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID univoco carrello', AUTO_INCREMENT=5;
 
 --
 -- 使用表AUTO_INCREMENT `ordine`
 --
 ALTER TABLE `ordine`
-  MODIFY `id_ordine` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID univoco ordine', AUTO_INCREMENT=5;
+  MODIFY `id_ordine` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID univoco ordine', AUTO_INCREMENT=20;
 
 --
 -- 使用表AUTO_INCREMENT `prodotto`
 --
 ALTER TABLE `prodotto`
-  MODIFY `id_prodotto` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID univoco prodotto', AUTO_INCREMENT=6;
+  MODIFY `id_prodotto` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID univoco prodotto', AUTO_INCREMENT=12;
 
 --
 -- 限制导出的表
