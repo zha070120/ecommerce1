@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 127.0.0.1
--- 生成日期： 2026-05-24 14:18:44
+-- 生成日期： 2026-05-24 23:34:16
 -- 服务器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -79,7 +79,8 @@ CREATE TABLE `ordine` (
 --
 
 INSERT INTO `ordine` (`id_ordine`, `email`, `data_ordine`, `stato_ordine`) VALUES
-(19, 'aaa@gmail.com', '2026-05-24', 'consegnato');
+(19, 'aaa@gmail.com', '2026-05-24', 'consegnato'),
+(20, 'aaa@gmail.com', '2026-05-24', 'attivo');
 
 -- --------------------------------------------------------
 
@@ -102,7 +103,15 @@ CREATE TABLE `prodotto` (
 
 INSERT INTO `prodotto` (`id_prodotto`, `nome`, `prezzo`, `p_iva`, `quantita_disponibile`, `indirizzo_img`) VALUES
 (10, 'telefono', 888.00, '999999999', 12, 'img/prodotti/prod_6a12e9c7bb61d_1779624391.jpg'),
-(11, 'computer', 1234.00, '88888888', 30, 'img/prodotti/prod_6a12eaa2c8410_1779624610.jpg');
+(11, 'computer', 1234.00, '88888888', 30, 'img/prodotti/prod_6a12eaa2c8410_1779624610.jpg'),
+(12, '*****', 9.99, '88888888', 100000, 'img/prodotti/prod_6a13150e31bdf_1779635470.png'),
+(13, 'maiale', 911.00, '88888888', 2, 'img/prodotti/prod_6a131623352e1_1779635747.gif'),
+(14, 'Raccoglitrice di cotone', 91919.00, '88888888', 32, 'img/prodotti/prod_6a1319253d305_1779636517.jpeg'),
+(15, 'Matita', 0.50, '999999999', 231, 'img/prodotti/prod_6a136d46a4820_1779658054.jpg'),
+(16, 'Penna', 1.00, '999999999', 35, 'img/prodotti/prod_6a136d54aeaad_1779658068.jpg'),
+(17, 'Quaderno', 3.00, '999999999', 90, 'img/prodotti/prod_6a136d62eb747_1779658082.jpg'),
+(18, 'Righello', 5.00, '999999999', 876, 'img/prodotti/prod_6a136dc714ad8_1779658183.jpg'),
+(19, 'Forbici', 6.00, '999999999', 8750, 'img/prodotti/prod_6a136e0c070a0_1779658252.jpg');
 
 -- --------------------------------------------------------
 
@@ -136,7 +145,9 @@ CREATE TABLE `p_o` (
 
 INSERT INTO `p_o` (`id_prodotto`, `id_ordine`, `pezzi`, `prezzo_singolo`, `prezzo_tot`) VALUES
 (10, 19, 1, 888.00, 888.00),
-(11, 19, 1, 1234.00, 1234.00);
+(11, 19, 1, 1234.00, 1234.00),
+(16, 20, 10, 1.00, 10.00),
+(19, 20, 6, 6.00, 36.00);
 
 -- --------------------------------------------------------
 
@@ -225,13 +236,13 @@ ALTER TABLE `carello`
 -- 使用表AUTO_INCREMENT `ordine`
 --
 ALTER TABLE `ordine`
-  MODIFY `id_ordine` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID univoco ordine', AUTO_INCREMENT=20;
+  MODIFY `id_ordine` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID univoco ordine', AUTO_INCREMENT=21;
 
 --
 -- 使用表AUTO_INCREMENT `prodotto`
 --
 ALTER TABLE `prodotto`
-  MODIFY `id_prodotto` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID univoco prodotto', AUTO_INCREMENT=12;
+  MODIFY `id_prodotto` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID univoco prodotto', AUTO_INCREMENT=20;
 
 --
 -- 限制导出的表
