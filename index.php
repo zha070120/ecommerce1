@@ -11,21 +11,14 @@ $stmt->execute();
 $products = $stmt->get_result();
 ?>
 
-<!-- 电商网站首页页面结构 -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <!-- 网页基础编码格式 -->
     <meta charset="UTF-8">
-    <!-- 适配手机、平板等移动端设备屏幕尺寸 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 网页标题 -->
     <title>Home - E-commerce Doubao</title>
-    <!-- 引入Font Awesome字体图标库，提供各类图标样式 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- 引入项目自定义全局样式表 -->
     <link rel="stylesheet" href="css/style.css">
-    <!-- 引入页面交互JS脚本文件，处理前端动态逻辑 -->
     <script src="js/main.js"></script>
 </head>
 <body>
@@ -71,54 +64,65 @@ $products = $stmt->get_result();
                     <!-- 循环遍历结果集，逐个渲染商品卡片 -->
                     <?php while ($product = $products->fetch_assoc()): ?>
                         <div class="product-card">
-                            <!-- 商品图片容器，固定4:3展示比例 -->
-                            <div class="image-container">
-                                <img src="<?= $product['indirizzo_img'] ?>" alt="<?= $product['nome'] ?>">
-                            </div>
-                            
-                            <!-- 商品名称 -->
-                            <h3><?= $product['nome'] ?></h3>
-                            <!-- 商品库存数量展示 -->
-                            <p>
-                                <i class="fas fa-check-circle in-stock"></i> 
-                                Disponibilità: <?= $product['quantita_disponibile'] ?> pezzi
-                            </p>
-                            <!-- 格式化欧元价格展示 -->
-                            <div class="price">€ <?= number_format($product['prezzo'], 2, '.', '') ?></div>
-                            
-                            <!-- 区分登录状态展示不同操作按钮 -->
-                            <?php if (isset($_SESSION['user_email'])): ?>
-                                <!-- 已登录：加入购物车表单，提交至购物车处理页面 -->
-                                <form method="POST" action="cart.php">
-                                    <!-- 隐藏域传递当前商品ID -->
-                                    <input type="hidden" name="product_id" value="<?= $product['id_prodotto'] ?>">
-                                    <div class="form-group">
-                                        <label for="qty-<?= $product['id_prodotto'] ?>">Quantità</label>
-                                        <!-- 购买数量选择框，限制最小1、最大为现有库存，防止超量下单 -->
-                                        <input 
-                                            type="number" 
-                                            id="qty-<?= $product['id_prodotto'] ?>" 
-                                            name="quantity" 
-                                            value="1" 
-                                            min="1" 
-                                            max="<?= $product['quantita_disponibile'] ?>" 
-                                            required
-                                        >
-                                    </div>
-                                    <!-- 加入购物车提交按钮 -->
-                                    <button type="submit" name="add_to_cart" class="btn">
-                                        <i class="fas fa-cart-plus"></i> Aggiungi al carrello
-                                    </button>
-                                </form>
-                            <?php else: ?>
-                                <!-- 未登录：提示用户登录后才可购买 -->
-                                <div style="padding: 0 1rem 1.5rem;">
-                                    <a href="login.php" class="btn">
-                                        <i class="fas fa-sign-in-alt"></i> Accedi per acquistare
-                                    </a>
-                                </div>
-                            <?php endif; ?>
-                        </div>
+    <!-- 商品图片容器，固定4:3展示比例 -->
+    <div class="image-container">
+        <img src="<?= $product['indirizzo_img'] ?>" alt="<?= $product['nome'] ?>">
+    </div>
+    
+    <!-- 商品名称 -->
+    <h3><?= $product['nome'] ?></h3>
+    <!-- 商品库存状态展示（新增缺货判断） -->
+    <p>
+        <?php if ($product['quantita_disponibile'] > 0): ?>
+            <i class="fas fa-check-circle in-stock"></i> 
+            Disponibilità: <?= $product['quantita_disponibile'] ?> pezzi
+        <?php else: ?>
+            <i class="fas fa-times-circle out-of-stock"></i> 
+            Non disponibile
+        <?php endif; ?>
+    </p>
+    <!-- 格式化欧元价格展示 -->
+    <div class="price">€ <?= number_format($product['prezzo'], 2, '.', '') ?></div>
+    
+    <!-- 区分登录状态和库存状态展示不同操作按钮 -->
+    <?php if (isset($_SESSION['user_email'])): ?>
+        <?php if ($product['quantita_disponibile'] > 0): ?>
+            <!-- 有库存：正常显示加入购物车表单 -->
+            <form method="POST" action="cart.php">
+                <input type="hidden" name="product_id" value="<?= $product['id_prodotto'] ?>">
+                <div class="form-group">
+                    <label for="qty-<?= $product['id_prodotto'] ?>">Quantità</label>
+                    <input 
+                        type="number" 
+                        id="qty-<?= $product['id_prodotto'] ?>" 
+                        name="quantity" 
+                        value="1" 
+                        min="1" 
+                        max="<?= $product['quantita_disponibile'] ?>" 
+                        required
+                    >
+                </div>
+                <button type="submit" name="add_to_cart" class="btn">
+                    <i class="fas fa-cart-plus"></i> Aggiungi al carrello
+                </button>
+            </form>
+        <?php else: ?>
+            <!-- 无库存：显示禁用的缺货按钮 -->
+            <div style="padding: 0 1rem 1.5rem;">
+                <button type="button" class="btn btn-disabled" disabled>
+                    <i class="fas fa-times"></i> Esaurito
+                </button>
+            </div>
+        <?php endif; ?>
+    <?php else: ?>
+        <!-- 未登录：保持原有的登录提示 -->
+        <div style="padding: 0 1rem 1.5rem;">
+            <a href="login.php" class="btn">
+                <i class="fas fa-sign-in-alt"></i> Accedi per acquistare
+            </a>
+        </div>
+    <?php endif; ?>
+</div>
                     <?php endwhile; ?>
                 </div>
             <?php else: ?>
