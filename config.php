@@ -23,7 +23,8 @@ $conn->set_charset("utf8mb4");
  * 检测卖家是否处于登录状态
  * @return bool true=已登录  false=未登录
  */
-function venditore_loggato() {
+function venditore_loggato()
+{
     // 判断会话中是否存在卖家税号标识且不为空
     return isset($_SESSION['venditore_piva']) && !empty($_SESSION['venditore_piva']);
 }
@@ -32,7 +33,8 @@ function venditore_loggato() {
  * 卖家权限校验函数
  * 未登录状态自动跳转至卖家登录页面，禁止访问后台页面
  */
-function richiedi_login_venditore() {
+function richiedi_login_venditore()
+{
     // 调用登录检测函数，未登录则执行跳转退出
     if (!venditore_loggato()) {
         header("Location: login_venditore.php");
@@ -44,7 +46,8 @@ function richiedi_login_venditore() {
  * 检测普通客户是否处于登录状态
  * @return bool true=已登录  false=未登录
  */
-function cliente_loggato() {
+function cliente_loggato()
+{
     // 判断会话中是否存在客户邮箱标识且不为空
     return isset($_SESSION['user_email']) && !empty($_SESSION['user_email']);
 }
@@ -53,11 +56,11 @@ function cliente_loggato() {
  * 客户权限校验函数
  * 未登录状态自动跳转至客户登录页面，禁止访问会员专属页面
  */
-function richiedi_login_cliente() {
+function richiedi_login_cliente()
+{
     // 调用登录检测函数，未登录则执行跳转退出
     if (!cliente_loggato()) {
         header("Location: login.php");
         exit;
     }
 }
-?>

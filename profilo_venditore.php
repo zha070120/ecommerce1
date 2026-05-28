@@ -11,7 +11,8 @@ $messaggio = '';
 $errore = '';
 
 
-function caricaProfilo($conn, $p_iva) {
+function caricaProfilo($conn, $p_iva)
+{
     // 预处理查询语句，防止SQL注入
     $stmt = $conn->prepare("SELECT * FROM venditore WHERE p_iva = ?");
     // 绑定字符串类型参数
@@ -43,7 +44,7 @@ if (isset($_POST['salva_profilo'])) {
     ");
     // 绑定四个字符串参数
     $stmt_aggiorna->bind_param("ssss", $ragione_sociale, $indirizzo, $cap, $p_iva_venditore);
-    
+
     // 判断数据库更新执行结果
     if ($stmt_aggiorna->execute()) {
         // 同步更新会话中的店铺名称，页面实时生效
@@ -71,13 +72,13 @@ if (isset($_POST['cambia_password'])) {
         // 校验两次输入的新密码是否一致
         if ($nuova_password === $conferma_password) {
             // 基础密码强度校验：密码长度至少6位
-            if(strlen($nuova_password) >= 6){
+            if (strlen($nuova_password) >= 6) {
                 // 对新密码进行哈希加密，明文不存入数据库
                 $nuova_hash = password_hash($nuova_password, PASSWORD_DEFAULT);
                 // 预处理语句更新数据库密码字段
                 $stmt_password = $conn->prepare("UPDATE venditore SET password = ? WHERE p_iva = ?");
                 $stmt_password->bind_param("ss", $nuova_hash, $p_iva_venditore);
-                
+
                 if ($stmt_password->execute()) {
                     $messaggio = "Password modificata con successo!";
                 } else {
@@ -99,6 +100,7 @@ if (isset($_POST['cambia_password'])) {
 <!-- 卖家个人资料页面 HTML 结构 -->
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <!-- 网页编码格式 -->
     <meta charset="UTF-8">
@@ -111,6 +113,7 @@ if (isset($_POST['cambia_password'])) {
     <!-- 引入项目全局样式文件 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <!-- 后台顶部导航栏 -->
     <header>
@@ -134,7 +137,7 @@ if (isset($_POST['cambia_password'])) {
     <!-- 页面主体内容容器 -->
     <main class="container">
         <h2><i class="fas fa-user-cog"></i> Il Tuo Profilo</h2>
-        
+
         <!-- 操作成功提示弹窗 -->
         <?php if ($messaggio): ?>
             <div class="alert alert-success">
@@ -158,25 +161,25 @@ if (isset($_POST['cambia_password'])) {
                     <label for="p_iva"><i class="fas fa-id-card"></i> Partita IVA (non modificabile)</label>
                     <input type="text" id="p_iva" value="<?= $profilo['p_iva'] ?? '' ?>" disabled>
                 </div>
-                
+
                 <!-- 公司名称输入框 -->
                 <div class="form-group">
                     <label for="ragione_sociale"><i class="fas fa-signature"></i> Ragione Sociale</label>
                     <input type="text" id="ragione_sociale" name="ragione_sociale" required value="<?= $profilo['ragione_sociale'] ?? '' ?>" placeholder="Inserisci la tua ragione sociale">
                 </div>
-                
+
                 <!-- 营业地址输入框 -->
                 <div class="form-group">
                     <label for="indirizzo"><i class="fas fa-map-marker-alt"></i> Indirizzo Sede</label>
                     <input type="text" id="indirizzo" name="indirizzo" required value="<?= $profilo['indirizzo'] ?? '' ?>" placeholder="Inserisci l'indirizzo della sede">
                 </div>
-                
+
                 <!-- 邮政编码输入框 -->
                 <div class="form-group">
                     <label for="cap"><i class="fas fa-mail-bulk"></i> CAP</label>
                     <input type="text" id="cap" name="cap" required value="<?= $profilo['cap'] ?? '' ?>" placeholder="Inserisci il CAP">
                 </div>
-                
+
                 <!-- 保存资料提交按钮 -->
                 <button type="submit" name="salva_profilo" class="btn btn-success submit-btn">
                     <i class="fas fa-save"></i> Salva Modifiche
@@ -193,19 +196,19 @@ if (isset($_POST['cambia_password'])) {
                     <label for="password_attuale"><i class="fas fa-lock"></i> Password Attuale</label>
                     <input type="password" id="password_attuale" name="password_attuale" required placeholder="Inserisci la password attuale">
                 </div>
-                
+
                 <!-- 新密码输入框 -->
                 <div class="form-group">
                     <label for="nuova_password"><i class="fas fa-key"></i> Nuova Password</label>
                     <input type="password" id="nuova_password" name="nuova_password" required placeholder="Inserisci la nuova password">
                 </div>
-                
+
                 <!-- 确认新密码输入框 -->
                 <div class="form-group">
                     <label for="conferma_password"><i class="fas fa-check"></i> Conferma Nuova Password</label>
                     <input type="password" id="conferma_password" name="conferma_password" required placeholder="Conferma la nuova password">
                 </div>
-                
+
                 <!-- 密码修改提交按钮 -->
                 <button type="submit" name="cambia_password" class="btn btn-success submit-btn">
                     <i class="fas fa-key"></i> Cambia Password
@@ -214,4 +217,5 @@ if (isset($_POST['cambia_password'])) {
         </div>
     </main>
 </body>
+
 </html>

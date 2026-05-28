@@ -53,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!-- 客户注册页面HTML结构 -->
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <!-- 网页文字编码格式，避免乱码 -->
     <meta charset="UTF-8">
@@ -65,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- 引入项目全局样式表 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <!-- 网站顶部导航栏 -->
     <header>
@@ -134,4 +136,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </main>
 </body>
+
 </html>

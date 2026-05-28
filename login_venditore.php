@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!-- 卖家登录页面结构 -->
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <!-- 网页编码格式 -->
     <meta charset="UTF-8">
@@ -57,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- 引入项目全局样式文件 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <!-- 网站顶部导航栏 -->
     <header>
@@ -103,4 +105,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </main>
 </body>
+
 </html>

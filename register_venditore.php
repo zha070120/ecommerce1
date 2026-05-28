@@ -10,7 +10,7 @@ $success = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // 获取表单提交数据，去除首尾多余空白字符，规整数据格式
     $p_iva          = trim($_POST['p_iva']);                // 企业税号
-    $ragione_sociale= trim($_POST['ragione_sociale']);      // 企业名称
+    $ragione_sociale = trim($_POST['ragione_sociale']);      // 企业名称
     $indirizzo      = trim($_POST['indirizzo']);            // 营业地址
     $cap            = trim($_POST['cap']);                  // 邮政编码
     $password       = trim($_POST['password']);             // 登录密码
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $insert_stmt = $conn->prepare("INSERT INTO venditore (p_iva, ragione_sociale, indirizzo, cap, password) VALUES (?, ?, ?, ?, ?)");
             // 绑定字符串类型参数
             $insert_stmt->bind_param("sssss", $p_iva, $ragione_sociale, $indirizzo, $cap, $password_hash);
-            
+
             // 执行数据插入并判断执行结果
             if ($insert_stmt->execute()) {
                 $success = "Registrazione completata! Ora puoi accedere.";
@@ -56,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!-- 卖家注册页面整体结构 -->
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <!-- 统一网页文字编码格式 -->
     <meta charset="UTF-8">
@@ -68,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- 引入项目全局自定义样式表 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <!-- 网站顶部导航栏 -->
     <header>
@@ -90,14 +92,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <h2><i class="fas fa-store"></i> Registrazione Venditore</h2>
 
             <!-- 注册失败错误提示弹窗 -->
-            <?php if($errore): ?>
+            <?php if ($errore): ?>
                 <div class="alert alert-danger">
                     <i class="fas fa-exclamation-circle"></i> <?= $errore ?>
                 </div>
             <?php endif; ?>
 
             <!-- 注册成功提示弹窗 -->
-            <?php if($success): ?>
+            <?php if ($success): ?>
                 <div class="alert alert-success">
                     <i class="fas fa-check-circle"></i> <?= $success ?>
                 </div>
@@ -143,4 +145,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </main>
 </body>
+
 </html>

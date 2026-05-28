@@ -79,6 +79,7 @@ $cart_items = $stmt_cart->get_result();
 <!-- 购物车页面整体结构 -->
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <!-- 移动端屏幕自适应适配 -->
@@ -89,6 +90,7 @@ $cart_items = $stmt_cart->get_result();
     <!-- 引入项目全局自定义样式 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <!-- 网站顶部导航栏区域 -->
     <header>
@@ -179,6 +181,7 @@ $cart_items = $stmt_cart->get_result();
         <?php endif; ?>
     </main>
 </body>
+
 </html>
 <?php
 // 关闭数据库查询语句，释放系统资源

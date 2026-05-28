@@ -61,6 +61,7 @@ $stmt_fatturato->close();
 <!-- 卖家后台仪表盘页面结构 -->
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <!-- 移动端自适应布局适配 -->
@@ -71,6 +72,7 @@ $stmt_fatturato->close();
     <!-- 引入项目全局自定义样式表 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <!-- 网站顶部导航栏区域 -->
     <header>
@@ -110,7 +112,7 @@ $stmt_fatturato->close();
                     <i class="fas fa-cog"></i> Gestisci prodotti
                 </a>
             </div>
-            
+
             <!-- 订单数量统计卡片 -->
             <div class="stat-card orders">
                 <div class="stat-icon">
@@ -123,7 +125,7 @@ $stmt_fatturato->close();
                     <i class="fas fa-eye"></i> Vedi ordini
                 </a>
             </div>
-            
+
             <!-- 店铺总营收统计卡片 -->
             <div class="stat-card revenue">
                 <div class="stat-icon">
@@ -136,4 +138,5 @@ $stmt_fatturato->close();
         </div>
     </main>
 </body>
+
 </html>

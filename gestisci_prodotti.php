@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 卖家商品管理页面
  * 功能：商品新增、修改、删除、图片上传、商品列表展示
@@ -30,20 +31,20 @@ $upload_config = [
 if (isset($_POST['elimina_prodotto'])) {
     // 强制转为整型，过滤非法参数，规避安全风险
     $id_prodotto = intval($_POST['id_prodotto']);
-    
+
     // 先校验商品归属权，只能删除自己上架的商品，同时查询关联图片路径
     $stmt_check = $conn->prepare("SELECT indirizzo_img FROM prodotto WHERE id_prodotto = ? AND p_iva = ?");
     $stmt_check->bind_param("is", $id_prodotto, $p_iva_venditore);
     $stmt_check->execute();
     $result = $stmt_check->get_result();
-    
+
     // 校验通过，商品属于当前卖家
     if ($result->num_rows === 1) {
         $prodotto = $result->fetch_assoc();
         // 执行数据库商品删除操作
         $stmt_elimina = $conn->prepare("DELETE FROM prodotto WHERE id_prodotto = ?");
         $stmt_elimina->bind_param("i", $id_prodotto);
-        
+
         if ($stmt_elimina->execute()) {
             // 数据库删除成功后，同步删除服务器本地存储的商品图片
             if (!empty($prodotto['indirizzo_img']) && file_exists($prodotto['indirizzo_img'])) {
@@ -107,7 +108,7 @@ if (isset($_POST['aggiungi_prodotto'])) {
         // 预处理语句，有效防止SQL注入攻击
         $stmt_aggiungi = $conn->prepare("INSERT INTO prodotto (nome, prezzo, p_iva, quantita_disponibile, indirizzo_img) VALUES (?, ?, ?, ?, ?)");
         $stmt_aggiungi->bind_param("sdsis", $nome, $prezzo, $p_iva_venditore, $quantita, $indirizzo_img);
-        
+
         if ($stmt_aggiungi->execute()) {
             $messaggio = "Prodotto aggiunto con successo!";
         } else {
@@ -225,6 +226,7 @@ $stmt_prodotti->close();
 <!-- 页面HTML结构 -->
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <!-- 移动端设备自适应布局 -->
@@ -235,6 +237,7 @@ $stmt_prodotti->close();
     <!-- 引入项目全局样式文件 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <!-- 后台顶部导航栏 -->
     <header>
@@ -258,7 +261,7 @@ $stmt_prodotti->close();
     <main class="container">
         <!-- 根据编辑/新增状态动态切换页面标题与图标 -->
         <h2><i class="fas fa-<?= $prodotto_da_modificare ? 'edit' : 'plus-circle' ?>"></i> <?= $prodotto_da_modificare ? 'Modifica Prodotto' : 'Aggiungi Nuovo Prodotto' ?></h2>
-        
+
         <!-- 操作成功提示弹窗 -->
         <?php if ($messaggio): ?>
             <div class="alert alert-success">
@@ -284,13 +287,13 @@ $stmt_prodotti->close();
                 <label for="nome"><i class="fas fa-tag"></i> Nome Prodotto</label>
                 <input type="text" id="nome" name="nome" required value="<?= $prodotto_da_modificare['nome'] ?? '' ?>" placeholder="Inserisci il nome del prodotto">
             </div>
-            
+
             <!-- 商品价格输入项，支持两位小数 -->
             <div class="form-group">
                 <label for="prezzo"><i class="fas fa-euro-sign"></i> Prezzo (€)</label>
                 <input type="number" step="0.01" id="prezzo" name="prezzo" required value="<?= $prodotto_da_modificare['prezzo'] ?? '' ?>" placeholder="Inserisci il prezzo">
             </div>
-            
+
             <!-- 商品库存数量输入项 -->
             <div class="form-group">
                 <label for="qty"><i class="fas fa-boxes"></i> Quantità Disponibile</label>
@@ -302,7 +305,7 @@ $stmt_prodotti->close();
                 <label for="img"><i class="fas fa-image"></i> Immagine Prodotto</label>
                 <input type="file" id="img" name="indirizzo_img" accept="image/jpg, image/jpeg, image/png, image/gif">
                 <small>Formati consentiti: JPG, JPEG, PNG, GIF | Dimensione massima: 2MB</small>
-                
+
                 <!-- 编辑模式展示原有商品预览图 -->
                 <?php if ($prodotto_da_modificare && !empty($prodotto_da_modificare['indirizzo_img'])): ?>
                     <br>
@@ -394,4 +397,5 @@ $stmt_prodotti->close();
         <?php endif; ?>
     </main>
 </body>
+
 </html>

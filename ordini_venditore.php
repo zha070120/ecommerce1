@@ -95,6 +95,7 @@ $stmt_ordini->close();
 <!-- 卖家订单管理页面HTML结构 -->
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <!-- 网页文字编码格式 -->
     <meta charset="UTF-8">
@@ -107,6 +108,7 @@ $stmt_ordini->close();
     <!-- 引入项目全局自定义样式表 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <!-- 网站后台顶部导航栏 -->
     <header>
@@ -157,12 +159,12 @@ $stmt_ordini->close();
                     <!-- 订单头部基础信息区域 -->
                     <div class="order-header">
                         <h3><i class="fas fa-receipt"></i> Ordine #<?= $ordine['id_ordine'] ?? '' ?></h3>
-                        
+
                         <!-- 订单下单日期展示 -->
                         <div class="order-info">
                             <p><i class="fas fa-calendar-alt"></i> <strong>Data:</strong> <?= date('d/m/Y', strtotime($ordine['data_ordine'] ?? '')) ?></p>
                         </div>
-                        
+
                         <!-- 订单当前状态展示 -->
                         <div class="order-info">
                             <p>
@@ -172,7 +174,7 @@ $stmt_ordini->close();
                                 </span>
                             </p>
                         </div>
-                        
+
                         <!-- 下单客户个人信息展示 -->
                         <div class="order-info">
                             <p><i class="fas fa-user"></i> <strong>Cliente:</strong> <?= $ordine['nome'] ?? '' ?> <?= $ordine['cognome'] ?? '' ?></p>
@@ -181,7 +183,7 @@ $stmt_ordini->close();
                     </div>
 
                     <!-- 订单锁定提示，已完结/取消订单无法修改状态 -->
-                    <?php if($blocca_modifica): ?>
+                    <?php if ($blocca_modifica): ?>
                         <div class="non-modificabile">
                             <i class="fas fa-lock"></i> Ordine non modificabile (già consegnato o annullato)
                         </div>
@@ -204,7 +206,7 @@ $stmt_ordini->close();
                             </button>
                         </form>
                     <?php endif; ?>
-                    
+
                     <!-- 订单商品明细表格区域 -->
                     <div class="table-container">
                         <table class="order-table">
@@ -268,4 +270,5 @@ $stmt_ordini->close();
         <?php endif; ?>
     </main>
 </body>
+
 </html>

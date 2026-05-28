@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->execute();
     // 获取查询结果集
     $result = $stmt->get_result();
-    
+
     // 判断是否查询到唯一匹配的客户账号
     if ($result->num_rows == 1) {
         // 读取账号完整数据
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // 登录成功，将用户核心信息存入会话，标记登录状态
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_name'] = $user['nome'];
-            
+
             // 根据用户邮箱查询对应的购物车记录
             $stmt_cart = $conn->prepare("SELECT id_carello FROM carello WHERE email = ?");
             $stmt_cart->bind_param("s", $user['email']);
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // 将购物车ID存入会话，后续购物操作关联当前用户购物车
             $_SESSION['cart_id'] = $cart['id_carello'];
             $stmt_cart->close();
-            
+
             // 登录完成跳转网站首页
             header("Location: index.php");
             exit;
@@ -68,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!-- 客户登录页面整体结构 -->
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <!-- 统一网页文字编码格式 -->
     <meta charset="UTF-8">
@@ -80,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- 引入项目全局自定义样式表 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <!-- 网站顶部导航栏区域 -->
     <header>
@@ -128,4 +130,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </main>
 </body>
+
 </html>

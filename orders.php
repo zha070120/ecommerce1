@@ -62,7 +62,6 @@ if (isset($_GET['cancel_id']) && is_numeric($_GET['cancel_id'])) {
         // 跳转订单页并携带取消成功标识
         header("Location: orders.php?success=2");
         exit;
-
     } catch (Exception $e) {
         // 出现任意错误，回滚所有数据库操作，避免数据错乱
         $conn->rollback();
@@ -112,6 +111,7 @@ $stmt_ordini->close();
 <!-- 个人订单页面HTML结构 -->
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <!-- 移动端自适应布局适配 -->
@@ -123,6 +123,7 @@ $stmt_ordini->close();
     <!-- 引入项目全局样式文件 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <!-- 网站顶部导航栏 -->
     <header>
@@ -177,39 +178,48 @@ $stmt_ordini->close();
                             <!-- 格式化订单日期展示 -->
                             <p><i class="fas fa-calendar-alt"></i> Data: <strong><?= date('d/m/Y', strtotime($ordine['info']['data_ordine'] ?? '')) ?></strong></p>
                             <p>
-                                Stato: 
+                                Stato:
                                 <!-- 根据订单状态绑定样式类，区分不同状态外观 -->
                                 <span class="status-badge status-<?= str_replace(' ', '-', strtolower(
-                                    $ordine['info']['stato_ordine'] == 'attivo' ? 'in-lavorazione' : 
-                                    $ordine['info']['stato_ordine']
-                                )) ?>">
-                                    <?php 
+                                                                        $ordine['info']['stato_ordine'] == 'attivo' ? 'in-lavorazione' :
+                                                                            $ordine['info']['stato_ordine']
+                                                                    )) ?>">
+                                    <?php
                                     // 状态文本翻译展示
-                                    switch($ordine['info']['stato_ordine'] ?? ''){
-                                        case 'attivo': echo 'In lavorazione'; break;
-                                        case 'spedito': echo 'Spedito'; break;
-                                        case 'consegnato': echo 'Consegnato'; break;
-                                        case 'annullato': echo 'Annullato'; break;
-                                        default: echo 'Sconosciuto';
+                                    switch ($ordine['info']['stato_ordine'] ?? '') {
+                                        case 'attivo':
+                                            echo 'In lavorazione';
+                                            break;
+                                        case 'spedito':
+                                            echo 'Spedito';
+                                            break;
+                                        case 'consegnato':
+                                            echo 'Consegnato';
+                                            break;
+                                        case 'annullato':
+                                            echo 'Annullato';
+                                            break;
+                                        default:
+                                            echo 'Sconosciuto';
                                     }
                                     ?>
                                 </span>
                             </p>
                         </div>
                     </div>
-                    
+
                     <!-- 仅处理中订单显示取消按钮 -->
-                    <?php if(($ordine['info']['stato_ordine'] ?? '') == 'attivo'): ?>
+                    <?php if (($ordine['info']['stato_ordine'] ?? '') == 'attivo'): ?>
                         <div class="cancel-button-container">
                             <!-- 取消订单链接，附带弹窗二次确认防止误操作 -->
-                            <a href="orders.php?cancel_id=<?= $ordine['info']['id_ordine'] ?? '' ?>" 
-                               class="btn btn-danger"
-                               onclick="return confirm('Sei sicuro di voler annullare questo ordine?')">
-                               <i class="fas fa-times"></i> Annulla Ordine
+                            <a href="orders.php?cancel_id=<?= $ordine['info']['id_ordine'] ?? '' ?>"
+                                class="btn btn-danger"
+                                onclick="return confirm('Sei sicuro di voler annullare questo ordine?')">
+                                <i class="fas fa-times"></i> Annulla Ordine
                             </a>
                         </div>
                     <?php endif; ?>
-                    
+
                     <!-- 订单商品明细表格 -->
                     <div class="table-container">
                         <table class="order-table">
@@ -256,4 +266,5 @@ $stmt_ordini->close();
         <?php endif; ?>
     </main>
 </body>
+
 </html>

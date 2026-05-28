@@ -13,6 +13,7 @@ $products = $stmt->get_result();
 
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +22,7 @@ $products = $stmt->get_result();
     <link rel="stylesheet" href="css/style.css">
     <script src="js/main.js"></script>
 </head>
+
 <body>
     <!-- 网站顶部导航栏区域 -->
     <header>
@@ -46,7 +48,7 @@ $products = $stmt->get_result();
             </nav>
         </div>
     </header>
-    
+
     <!-- 页面主体内容容器 -->
     <main class="container">
         <!-- AJAX动态加载热销商品模块 -->
@@ -64,65 +66,64 @@ $products = $stmt->get_result();
                     <!-- 循环遍历结果集，逐个渲染商品卡片 -->
                     <?php while ($product = $products->fetch_assoc()): ?>
                         <div class="product-card">
-    <!-- 商品图片容器，固定4:3展示比例 -->
-    <div class="image-container">
-        <img src="<?= $product['indirizzo_img'] ?>" alt="<?= $product['nome'] ?>">
-    </div>
-    
-    <!-- 商品名称 -->
-    <h3><?= $product['nome'] ?></h3>
-    <!-- 商品库存状态展示（新增缺货判断） -->
-    <p>
-        <?php if ($product['quantita_disponibile'] > 0): ?>
-            <i class="fas fa-check-circle in-stock"></i> 
-            Disponibilità: <?= $product['quantita_disponibile'] ?> pezzi
-        <?php else: ?>
-            <i class="fas fa-times-circle out-of-stock"></i> 
-            Non disponibile
-        <?php endif; ?>
-    </p>
-    <!-- 格式化欧元价格展示 -->
-    <div class="price">€ <?= number_format($product['prezzo'], 2, '.', '') ?></div>
-    
-    <!-- 区分登录状态和库存状态展示不同操作按钮 -->
-    <?php if (isset($_SESSION['user_email'])): ?>
-        <?php if ($product['quantita_disponibile'] > 0): ?>
-            <!-- 有库存：正常显示加入购物车表单 -->
-            <form method="POST" action="cart.php">
-                <input type="hidden" name="product_id" value="<?= $product['id_prodotto'] ?>">
-                <div class="form-group">
-                    <label for="qty-<?= $product['id_prodotto'] ?>">Quantità</label>
-                    <input 
-                        type="number" 
-                        id="qty-<?= $product['id_prodotto'] ?>" 
-                        name="quantity" 
-                        value="1" 
-                        min="1" 
-                        max="<?= $product['quantita_disponibile'] ?>" 
-                        required
-                    >
-                </div>
-                <button type="submit" name="add_to_cart" class="btn">
-                    <i class="fas fa-cart-plus"></i> Aggiungi al carrello
-                </button>
-            </form>
-        <?php else: ?>
-            <!-- 无库存：显示禁用的缺货按钮 -->
-            <div style="padding: 0 1rem 1.5rem;">
-                <button type="button" class="btn btn-disabled" disabled>
-                    <i class="fas fa-times"></i> Esaurito
-                </button>
-            </div>
-        <?php endif; ?>
-    <?php else: ?>
-        <!-- 未登录：保持原有的登录提示 -->
-        <div style="padding: 0 1rem 1.5rem;">
-            <a href="login.php" class="btn">
-                <i class="fas fa-sign-in-alt"></i> Accedi per acquistare
-            </a>
-        </div>
-    <?php endif; ?>
-</div>
+                            <!-- 商品图片容器，固定4:3展示比例 -->
+                            <div class="image-container">
+                                <img src="<?= $product['indirizzo_img'] ?>" alt="<?= $product['nome'] ?>">
+                            </div>
+
+                            <!-- 商品名称 -->
+                            <h3><?= $product['nome'] ?></h3>
+                            <!-- 商品库存状态展示（新增缺货判断） -->
+                            <p>
+                                <?php if ($product['quantita_disponibile'] > 0): ?>
+                                    <i class="fas fa-check-circle in-stock"></i>
+                                    Disponibilità: <?= $product['quantita_disponibile'] ?> pezzi
+                                <?php else: ?>
+                                    <i class="fas fa-times-circle out-of-stock"></i>
+                                    Non disponibile
+                                <?php endif; ?>
+                            </p>
+                            <!-- 格式化欧元价格展示 -->
+                            <div class="price">€ <?= number_format($product['prezzo'], 2, '.', '') ?></div>
+
+                            <!-- 区分登录状态和库存状态展示不同操作按钮 -->
+                            <?php if (isset($_SESSION['user_email'])): ?>
+                                <?php if ($product['quantita_disponibile'] > 0): ?>
+                                    <!-- 有库存：正常显示加入购物车表单 -->
+                                    <form method="POST" action="cart.php">
+                                        <input type="hidden" name="product_id" value="<?= $product['id_prodotto'] ?>">
+                                        <div class="form-group">
+                                            <label for="qty-<?= $product['id_prodotto'] ?>">Quantità</label>
+                                            <input
+                                                type="number"
+                                                id="qty-<?= $product['id_prodotto'] ?>"
+                                                name="quantity"
+                                                value="1"
+                                                min="1"
+                                                max="<?= $product['quantita_disponibile'] ?>"
+                                                required>
+                                        </div>
+                                        <button type="submit" name="add_to_cart" class="btn">
+                                            <i class="fas fa-cart-plus"></i> Aggiungi al carrello
+                                        </button>
+                                    </form>
+                                <?php else: ?>
+                                    <!-- 无库存：显示禁用的缺货按钮 -->
+                                    <div style="padding: 0 1rem 1.5rem;">
+                                        <button type="button" class="btn btn-disabled" disabled>
+                                            <i class="fas fa-times"></i> Esaurito
+                                        </button>
+                                    </div>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <!-- 未登录：保持原有的登录提示 -->
+                                <div style="padding: 0 1rem 1.5rem;">
+                                    <a href="login.php" class="btn">
+                                        <i class="fas fa-sign-in-alt"></i> Accedi per acquistare
+                                    </a>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                     <?php endwhile; ?>
                 </div>
             <?php else: ?>
@@ -184,7 +185,7 @@ $products = $stmt->get_result();
                     <p><i class="fas fa-phone"></i> +39 06 12345678</p>
                     <p><i class="fas fa-envelope"></i> info@ecommercedoubao.it</p>
                     <p><i class="fas fa-clock"></i> Lun-Dom: 00:00-23:59</p>
-                    
+
                     <!-- 支持的支付方式图标 -->
                     <div class="payment-methods">
                         <i class="fab fa-cc-visa"></i>
@@ -202,6 +203,7 @@ $products = $stmt->get_result();
         </div>
     </footer>
 </body>
+
 </html>
 <?php
 // 释放查询结果集内存资源

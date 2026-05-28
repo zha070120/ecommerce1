@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // 重置结果集读取指针，从头遍历购物车商品
         $cart_items->data_seek(0);
-        
+
         // 2. 循环遍历商品，生成订单明细并扣减商品库存
         while ($item = $cart_items->fetch_assoc()) {
             $product_id = $item['id_prodotto'];  // 商品编号
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt_stock = $conn->prepare("UPDATE prodotto SET quantita_disponibile = quantita_disponibile - ? WHERE id_prodotto = ? AND quantita_disponibile >= ?");
             $stmt_stock->bind_param("iii", $quantity, $product_id, $quantity);
             $stmt_stock->execute();
-            
+
             // 影响行数为0说明库存不足，抛出异常终止下单流程
             if ($stmt_stock->affected_rows === 0) {
                 throw new Exception("Prodotto '" . $item['nome'] . "' ha finito le scorte!");
@@ -86,7 +86,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // 跳转我的订单页面，携带下单成功标识
         header("Location: orders.php?success=1");
         exit;
-
     } catch (Exception $e) {
         // 出现任意异常，回滚事务，撤销所有数据库操作，保证数据一致性
         $conn->rollback();
@@ -102,6 +101,7 @@ $total = 0;
 <!-- 结账确认页面HTML结构 -->
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <!-- 移动端自适应布局适配 -->
@@ -112,6 +112,7 @@ $total = 0;
     <!-- 引入项目公共样式文件 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <!-- 网站顶部导航栏 -->
     <header>
@@ -131,7 +132,7 @@ $total = 0;
     <!-- 页面主体内容区域 -->
     <main class="container">
         <h2><i class="fas fa-credit-card"></i> Conferma ordine</h2>
-        
+
         <!-- 订单操作错误提示弹窗 -->
         <?php if (!empty($error)): ?>
             <div class="alert alert-danger">
@@ -150,14 +151,14 @@ $total = 0;
                 </tr>
             </thead>
             <tbody>
-                <?php 
+                <?php
                 // 重置结果集指针，循环遍历渲染商品列表
                 $cart_items->data_seek(0);
-                while ($item = $cart_items->fetch_assoc()): 
+                while ($item = $cart_items->fetch_assoc()):
                     // 计算单品小计金额
-                    $subtotal = $item['prezzo'] * $item['pezzi']; 
+                    $subtotal = $item['prezzo'] * $item['pezzi'];
                     // 累加计算订单总金额
-                    $total += $subtotal; 
+                    $total += $subtotal;
                 ?>
                     <tr>
                         <td class="product-name"><?= $item['nome'] ?></td>
@@ -190,6 +191,7 @@ $total = 0;
         </form>
     </main>
 </body>
+
 </html>
 <?php
 // 关闭数据库查询语句，释放数据库连接资源
