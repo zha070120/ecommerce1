@@ -1,66 +1,129 @@
 <?php
-// 开启会话功能，用于存储用户登录信息、身份标识、购物车数据
-session_start();
+// ===================== 调试开关 =====================
+define('DEBUG', true); // 开发环境设true，生产环境设false
 
-// ========== 数据库连接基础配置参数 ==========
-$host = 'localhost';                // 数据库服务器地址，本地数据库固定地址
-$dbname = 'ecommerce_italia';       // 项目对应的数据库名称
-$username = 'root';                 // MySQL数据库登录用户名
-$password = '';                     // 数据库登录密码，本地环境默认无密码
-
-// 创建MySQL数据库连接实例
-$conn = new mysqli($host, $username, $password, $dbname);
-
-// 判断数据库连接是否异常，连接失败则终止程序并输出错误信息
-if ($conn->connect_error) {
-    die("Connessione fallita: " . $conn->connect_error);
+if (DEBUG) {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+} else {
+    ini_set('display_errors', 0);
+    error_reporting(0);
 }
 
-// 设置数据库字符编码为utf8mb4，兼容所有文字、特殊符号与图片表情
+// ===================== Session 安全加固 =====================
+ini_set('session.cookie_httponly', 1);    // 禁止JS读取session cookie
+ini_set('session.cookie_samesite', 'Lax'); // 防CSRF基础
+ini_set('session.use_only_cookies', 1);    // 仅用cookie传递session id
+ini_set('session.use_strict_mode', 1);     // 禁止未初始化的session
+
+session_start();
+
+// ===================== 数据库连接 =====================
+$host = 'localhost';
+$dbname = 'ecommerce_italia';
+$username = 'root';
+$password = '';
+
+$conn = new mysqli($host, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    if (DEBUG) {
+        die("Connessione fallita: " . $conn->connect_error);
+    } else {
+        die("Errore di sistema. Riprova più tardi.");
+    }
+}
+
 $conn->set_charset("utf8mb4");
 
+// ===================== XSS 转义快捷函数 =====================
 /**
- * 检测卖家是否处于登录状态
- * @return bool true=已登录  false=未登录
+ * HTML安全转义，防XSS
+ * @param mixed $str
+ * @return string
  */
+function e($str)
+{
+    return htmlspecialchars((string)$str, ENT_QUOTES, 'UTF-8');
+}
+
+// ===================== CSRF 防护 =====================
+/**
+ * 生成并存储CSRF Token
+ * @return string
+ */
+function csrf_token()
+{
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+/**
+ * 输出CSRF hidden input字段
+ */
+function csrf_field()
+{
+    echo '<input type="hidden" name="csrf_token" value="' . e(csrf_token()) . '">';
+}
+
+/**
+ * 校验CSRF Token，不通过直接终止
+ */
+function verify_csrf()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $token = isset($_POST['csrf_token']) ? $_POST['csrf_token'] : '';
+        if (!hash_equals($_SESSION['csrf_token'] ?? '', $token)) {
+            http_response_code(403);
+            die("Richiesta non valida (CSRF).");
+        }
+    }
+}
+
+// ===================== 登录状态检测函数 =====================
 function venditore_loggato()
 {
-    // 判断会话中是否存在卖家税号标识且不为空
     return isset($_SESSION['venditore_piva']) && !empty($_SESSION['venditore_piva']);
 }
 
-/**
- * 卖家权限校验函数
- * 未登录状态自动跳转至卖家登录页面，禁止访问后台页面
- */
 function richiedi_login_venditore()
 {
-    // 调用登录检测函数，未登录则执行跳转退出
     if (!venditore_loggato()) {
         header("Location: login_venditore.php");
         exit;
     }
 }
 
-/**
- * 检测普通客户是否处于登录状态
- * @return bool true=已登录  false=未登录
- */
 function cliente_loggato()
 {
-    // 判断会话中是否存在客户邮箱标识且不为空
     return isset($_SESSION['user_email']) && !empty($_SESSION['user_email']);
 }
 
-/**
- * 客户权限校验函数
- * 未登录状态自动跳转至客户登录页面，禁止访问会员专属页面
- */
 function richiedi_login_cliente()
 {
-    // 调用登录检测函数，未登录则执行跳转退出
     if (!cliente_loggato()) {
         header("Location: login.php");
         exit;
     }
+}
+
+// ===================== 工具函数 =====================
+/**
+ * 安全重定向
+ */
+function redirect($url)
+{
+    header("Location: $url");
+    exit;
+}
+
+/**
+ * 格式化欧元价格
+ */
+function fmt_euro($val)
+{
+    return '€ ' . number_format((float)$val, 2, ',', '.');
 }

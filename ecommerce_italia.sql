@@ -71,7 +71,13 @@ CREATE TABLE `ordine` (
   `id_ordine` int(11) NOT NULL COMMENT 'ID univoco ordine',
   `email` varchar(100) NOT NULL COMMENT 'Email cliente (chiave esterna)',
   `data_ordine` date NOT NULL COMMENT 'Data di creazione ordine',
-  `stato_ordine` enum('attivo','spedito','consegnato','annullato') NOT NULL DEFAULT 'attivo' COMMENT 'Stato ordine (es: attivo, consegnato, annullato)'
+  `stato_ordine` enum('in_attesa','attivo','spedito','consegnato','annullato') NOT NULL DEFAULT 'in_attesa' COMMENT 'Stato ordine',
+  `indirizzo_spedizione` varchar(200) DEFAULT NULL COMMENT 'Indirizzo di spedizione',
+  `citta` varchar(100) DEFAULT NULL COMMENT 'Città di spedizione',
+  `cap` varchar(10) DEFAULT NULL COMMENT 'CAP di spedizione',
+  `provincia` varchar(50) DEFAULT NULL COMMENT 'Provincia di spedizione',
+  `telefono` varchar(20) DEFAULT NULL COMMENT 'Numero di telefono',
+  `note` text DEFAULT NULL COMMENT 'Note aggiuntive ordine'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Tabella testata ordini';
 
 --
@@ -91,6 +97,7 @@ INSERT INTO `ordine` (`id_ordine`, `email`, `data_ordine`, `stato_ordine`) VALUE
 CREATE TABLE `prodotto` (
   `id_prodotto` int(11) NOT NULL COMMENT 'ID univoco prodotto',
   `nome` varchar(100) NOT NULL COMMENT 'Nome del prodotto',
+  `descrizione` text DEFAULT NULL COMMENT 'Descrizione prodotto',
   `prezzo` decimal(10,2) NOT NULL COMMENT 'Prezzo unitario',
   `p_iva` varchar(13) NOT NULL COMMENT 'Partita IVA venditore (chiave esterna)',
   `quantita_disponibile` int(11) NOT NULL COMMENT 'Quantità disponibile in magazzino',
